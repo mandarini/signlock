@@ -8,7 +8,6 @@ import {
 import * as tf from "@tensorflow/tfjs";
 import { Webcam } from "../webcam";
 import { ControllerDataset } from "../controller-dataset";
-import { Model } from "@tensorflow/tfjs";
 
 @Component({
   selector: "app-controls",

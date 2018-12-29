@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyBJfmZ9f-iZXnbhlzKeTAO_cLEKkhewTjQ",
+    authDomain: "signlock-psyb.firebaseapp.com",
+    databaseURL: "https://signlock-psyb.firebaseio.com",
+    projectId: "signlock-psyb",
+    storageBucket: "signlock-psyb.appspot.com",
+    messagingSenderId: "130343872805"
+  }
 };
 
 /*
