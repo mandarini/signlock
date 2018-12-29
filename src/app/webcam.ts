@@ -22,7 +22,7 @@ import * as tf from "@tensorflow/tfjs";
 export class Webcam {
   webcamElement: HTMLVideoElement;
 
-  constructor(webcamElement) {
+  constructor(webcamElement: HTMLVideoElement) {
     this.webcamElement = webcamElement;
   }
 
