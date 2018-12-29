@@ -1,14 +1,14 @@
-<div id="status" #status>Loading mobilenet...</div>
+<div id="status" #status *ngIf="predictingVisible">Loading mobilenet...</div>
 
 <div class="controller-panels" id="controller" #controller style="display:none">
   <div class="panel training-panel">
     <!-- Big buttons. -->
     <div class="panel-row big-buttons">
-      <button id="train" #train>
+      <button (click)="trainBtn()">
         <img width="66" height="66" src="assets/images/button.svg" />
         <span id="train-status" #trainStatus>TRAIN MODEL</span>
       </button>
-      <button id="predict" #predict>
+      <button (click)="predictBtn()">
         <img width="66" height="66" src="assets/images/button.svg" />
         <span>PLAY</span>
       </button>
