@@ -30,7 +30,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   truncatedMobileNet: any;
   model: any;
   addExampleHandler: any;
-  thumbDisplayed: Object;
+  thumbDisplayed: Object = {};
   isPredicting: boolean = false;
   predictingVisible: boolean = true;
 
@@ -72,12 +72,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("upThumb") upThumb: ElementRef;
   @ViewChild("downThumb") downThumb: ElementRef;
 
-  BUTTONS: Array<ElementRef> = [
-    this.upThumb,
-    this.downThumb,
-    this.leftThumb,
-    this.rightThumb
-  ];
+  BUTTONS: Array<ElementRef>;
 
   constructor() {
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
@@ -89,6 +84,12 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     console.log("hey");
+    this.BUTTONS= [
+      this.upThumb,
+      this.downThumb,
+      this.leftThumb,
+      this.rightThumb
+    ];
     this.webcam = new Webcam(this.webcamEl.nativeElement);
     this.webcam
       .setup()
@@ -140,7 +141,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   drawThumb(img, label) {
     if (this.thumbDisplayed[label] == null) {
-      const thumbCanvas = this.BUTTONS[label];
+      console.log(this.BUTTONS);
+      const thumbCanvas = this.BUTTONS[label].nativeElement;
       this.draw(img, thumbCanvas);
     }
   }
