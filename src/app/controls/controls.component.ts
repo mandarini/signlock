@@ -17,6 +17,12 @@ import { Model } from "@tensorflow/tfjs";
 })
 export class ControlsComponent implements AfterViewInit, OnInit {
   CONTROLS: Array<string> = ["up", "down", "left", "right"];
+  examples: Object = {
+    "up":0,
+    "down":0,
+    "left": 0,
+    "right": 0
+  };
   CONTROL_CODES: Array<number> = [38, 40, 37, 39];
   NUM_CLASSES: number = 4;
   webcam: Webcam;
@@ -82,13 +88,16 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    console.log('hey');
+    console.log("hey");
     this.webcam = new Webcam(this.webcamEl.nativeElement);
-    this.webcam.setup().then(() => {
-      console.log('trying');
-    }).catch(()=>{
-      document.getElementById("no-webcam").style.display = "block";
-    });
+    this.webcam
+      .setup()
+      .then(() => {
+        console.log("trying");
+      })
+      .catch(() => {
+        document.getElementById("no-webcam").style.display = "block";
+      });
     this.setExampleHandler(label => {
       tf.tidy(() => {
         const img = this.webcam.capture();
@@ -263,5 +272,12 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   predictBtn() {
     this.isPredicting = true;
     this.predict();
+  }
+
+  async handler(label) {
+    this.addExampleHandler(label);
+    this.examples[label]++;
+    await tf.nextFrame();
+    document.body.removeAttribute("data-active");
   }
 }

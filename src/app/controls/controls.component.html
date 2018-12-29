@@ -110,11 +110,11 @@
                 #upThumb
               ></canvas>
             </div>
-            <button class="record-button" id="up" #up>
+            <button class="record-button" id="up" #up (click)="handler(0)">
               <span>Add Sample</span>
             </button>
           </div>
-          <p><span id="up-total">0</span> examples</p>
+          <p>{{examples.up}} examples</p>
         </div>
       </div>
       <!-- ./panel-cell -->
@@ -136,11 +136,11 @@
                 #leftThumb
               ></canvas>
             </div>
-            <button class="record-button" id="left" #left>
+            <button class="record-button" id="left" #left (click)="handler(2)">
               <span>Add Sample</span>
             </button>
           </div>
-          <p><span id="left-total" #leftTotal>0</span> examples</p>
+          <p>{{examples.left}} examples</p>
         </div>
       </div>
       <!-- ./panel-cell -->
@@ -162,11 +162,11 @@
                 #rightThumb
               ></canvas>
             </div>
-            <button class="record-button" id="right" #right>
+            <button class="record-button" id="right" #right (click)="handler(3)">
               <span>Add Sample</span>
             </button>
           </div>
-          <p><span id="right-total" #rightTotal>0</span> examples</p>
+          <p>{{examples.right}} examples</p>
         </div>
       </div>
       <!-- ./panel-cell -->
@@ -189,11 +189,11 @@
                 #downThumb
               ></canvas>
             </div>
-            <button class="record-button" id="down" #down>
+            <button class="record-button" id="down" #down (click)="handler(1)">
               <span>Add Sample</span>
             </button>
           </div>
-          <p><span id="down-total" #downTotal>0</span> examples</p>
+          <p>{{examples.down}} examples</p>
         </div>
       </div>
       <!-- ./panel-cell -->
