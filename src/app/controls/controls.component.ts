@@ -236,6 +236,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
   async predict() {
     this.predictingVisible = true;
+    console.log('predicting');
     while (this.isPredicting) {
       const predictedClass = tf.tidy(() => {
         // Capture the frame from the webcam.
@@ -251,11 +252,13 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
         // Returns the index with the maximum probability. This number corresponds
         // to the class the model thinks is the most probable given the input.
+        // console.log(predictions.as1D().argMax());
         return predictions.as1D().argMax();
       });
 
       const classId = (await predictedClass.data())[0];
       predictedClass.dispose();
+      console.log(classId);
 
       document.body.setAttribute("data-active", this.CONTROLS[classId]);
       await tf.nextFrame();
