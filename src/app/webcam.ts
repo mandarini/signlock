@@ -82,11 +82,9 @@ export class Webcam {
   async setup() {
     return new Promise((resolve, reject) => {
       const navigatorAny = navigator;
+      console.log(navigator);
       navigator.getUserMedia =
-        navigator.getUserMedia ||
-        navigatorAny.webkitGetUserMedia ||
-        navigatorAny.mozGetUserMedia ||
-        navigatorAny.msGetUserMedia;
+        navigator.getUserMedia;
       if (navigator.getUserMedia) {
         navigator.getUserMedia(
           { video: true },

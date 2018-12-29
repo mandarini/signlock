@@ -82,7 +82,13 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
+    console.log('hey');
     this.webcam = new Webcam(this.webcamEl.nativeElement);
+    this.webcam.setup().then(() => {
+      console.log('trying');
+    }).catch(()=>{
+      document.getElementById("no-webcam").style.display = "block";
+    });
     this.setExampleHandler(label => {
       tf.tidy(() => {
         const img = this.webcam.capture();
@@ -95,6 +101,18 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         this.drawThumb(img, label);
       });
     });
+  }
+
+  async init() {
+    this.truncatedMobileNet = await this.loadTruncatedMobileNet();
+
+    // Warm up the model. This uploads weights to the GPU and compiles the WebGL
+    // programs so the first time we collect data from the webcam it will be
+    // quick.
+    tf.tidy(() => this.truncatedMobileNet.predict(this.webcam.capture()));
+
+    this.controller.nativeElement.style.display = "";
+    this.statusEl.nativeElement.style.display = "none";
   }
 
   async loadTruncatedMobileNet() {
@@ -245,22 +263,5 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   predictBtn() {
     this.isPredicting = true;
     this.predict();
-  }
-
-  async init() {
-    try {
-      await this.webcam.setup();
-    } catch (e) {
-      document.getElementById("no-webcam").style.display = "block";
-    }
-    this.truncatedMobileNet = await this.loadTruncatedMobileNet();
-
-    // Warm up the model. This uploads weights to the GPU and compiles the WebGL
-    // programs so the first time we collect data from the webcam it will be
-    // quick.
-    tf.tidy(() => this.truncatedMobileNet.predict(this.webcam.capture()));
-
-    this.controller.nativeElement.style.display = "";
-    this.statusEl.nativeElement.style.display = "none";
   }
 }
