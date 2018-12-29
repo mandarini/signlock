@@ -228,6 +228,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         }
       }
     });
+
+    this.model.save('downloads://my-model-1')
   }
 
   trainStatus(status: string) {
