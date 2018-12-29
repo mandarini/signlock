@@ -1,0 +1,11 @@
+<h1>Welcome to SignLock</h1>
+<p>
+  SignLock is your most personal secret space, since it's unlocked by your
+  secret hand signs!
+</p>
+<div *ngIf="!authenticated">
+  <p><button (click)="loginScreen = !loginScreen">Log in</button> to your account</p>
+  <p><button routerLink="/create">Create a new account</button></p>
+  <div *ngIf="loginScreen"><p>log in here</p></div>
+</div>
+<div *ngIf="authenticated">Welcome {{ user }}!</div>
