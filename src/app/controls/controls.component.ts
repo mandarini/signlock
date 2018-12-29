@@ -276,7 +276,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   async handler(label) {
     this.addExampleHandler(label);
-    this.examples[label]++;
+    this.examples[this.CONTROLS[label]]++;
     await tf.nextFrame();
     document.body.removeAttribute("data-active");
   }
