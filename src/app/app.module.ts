@@ -8,8 +8,9 @@ import { CreateComponent } from "./create/create.component";
 import { ControlsComponent } from "./controls/controls.component";
 import { HomeComponent } from "./home/home.component";
 import { AngularFireModule } from "@angular/fire";
-import { environment } from "../environments/environment";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AppRoutingModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]

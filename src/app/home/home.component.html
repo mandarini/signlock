@@ -3,9 +3,16 @@
   SignLock is your most personal secret space, since it's unlocked by your
   secret hand signs!
 </p>
-<div *ngIf="!authenticated">
-  <p><button (click)="loginScreen = !loginScreen">Log in</button> to your account</p>
-  <p><button routerLink="/create">Create a new account</button></p>
+<h1>Hello {{ user.displayName }}!</h1>
+<button (click)="logout()">Logout</button>
+<div *ngIf="signstep">
+  <p>
+    <button (click)="loginScreen = !loginScreen">Log in</button> to your account
+  </p>
   <div *ngIf="loginScreen"><p>log in here</p></div>
 </div>
-<div *ngIf="authenticated">Welcome {{ user }}!</div>
+<div *ngIf="!signstep">
+  <p>
+    <button routerLink="/create">Create a new sign step authentication</button>
+  </p>
+</div>

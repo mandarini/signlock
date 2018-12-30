@@ -8,6 +8,15 @@ import {
 import * as tf from "@tensorflow/tfjs";
 import { Webcam } from "../webcam";
 import { ControllerDataset } from "../controller-dataset";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection
+} from "@angular/fire/firestore";
+import { Observable } from "rxjs";
+
+export interface Item {
+  name: string;
+}
 
 @Component({
   selector: "app-controls",
@@ -17,10 +26,10 @@ import { ControllerDataset } from "../controller-dataset";
 export class ControlsComponent implements AfterViewInit, OnInit {
   CONTROLS: Array<string> = ["up", "down", "left", "right"];
   examples: Object = {
-    "up":0,
-    "down":0,
-    "left": 0,
-    "right": 0
+    up: 0,
+    down: 0,
+    left: 0,
+    right: 0
   };
   CONTROL_CODES: Array<number> = [38, 40, 37, 39];
   NUM_CLASSES: number = 4;
@@ -72,9 +81,17 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("downThumb") downThumb: ElementRef;
 
   BUTTONS: Array<ElementRef>;
+  private itemsCollection: AngularFirestoreCollection<Item>;
+  items: Observable<Item[]>;
 
-  constructor() {
+  constructor(private afs: AngularFirestore) {
+    this.itemsCollection = afs.collection<Item>("items");
+    this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
+  }
+  
+  addItem(item: Item) {
+    this.itemsCollection.add(item);
   }
 
   ngOnInit() {
@@ -83,7 +100,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     console.log("hey");
-    this.BUTTONS= [
+    this.BUTTONS = [
       this.upThumb,
       this.downThumb,
       this.leftThumb,
@@ -229,7 +246,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       }
     });
 
-    await this.model.save('downloads://my-model-1');
+    await this.model.save("downloads://my-model-1");
   }
 
   trainStatus(status: string) {
@@ -237,7 +254,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
   async predict() {
     this.predictingVisible = true;
-    console.log('predicting');
+    console.log("predicting");
     while (this.isPredicting) {
       const predictedClass = tf.tidy(() => {
         // Capture the frame from the webcam.
@@ -258,7 +275,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
       const classId = (await predictedClass.data())[0];
       predictedClass.dispose();
-      console.log('moving ',this.CONTROLS[classId]);
+      console.log("moving ", this.CONTROLS[classId]);
 
       document.body.setAttribute("data-active", this.CONTROLS[classId]);
       await tf.nextFrame();
