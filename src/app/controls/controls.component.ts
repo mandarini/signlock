@@ -90,6 +90,12 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   fileName1: string;
   fileName2: string;
 
+  jsonFile: File;
+  weightsFile: File;
+
+  donejson: boolean = false;
+  doneweights: boolean = false;
+
   constructor(
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
@@ -103,20 +109,22 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   // addItem(item: Item) {
   //   this.itemsCollection.add(item);
   // }\
-  uploadFile(event) {
-    console.log('file',this.moodFile.nativeElement.files[0]);
-    console.log(event, 'file',event.target.files[0]);
-    console.log("uploading");
+  uploadFile(event, name) {
+    // console.log("file", this.moodFile.nativeElement.files[0]);
+    console.log(event, "file", event.target.files[0]);
+    console.log("uploading", name);
     const file = event.target.files[0];
-    const filePath = this.fileName1;
+    const filePath = name;
     const ref = this.storage.ref(filePath);
     const task = ref.put(file);
     console.log(task);
-    task.then(res=> {
-      console.log(res);
-    }).catch(err=>{
-      console.error(err);
-    })
+    task
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   ngOnInit() {
@@ -373,6 +381,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         //     console.error(err);
         // //   });
 
+        // This cannot work because only one file can be posted to firestore at a time
+
         this.model
           .save(
             tf.io.browserHTTPRequest(
@@ -380,9 +390,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
               "https://firebasestorage.googleapis.com/v0/b/signlock-psyb.appspot.com/o?name=jsontestnew",
               {
                 method: "POST",
-                headers: { 
+                headers: {
                   "Content-Type": "application/json; charset=UTF-8",
-                  Authorization: `Firebase ${idToken}` }
+                  Authorization: `Firebase ${idToken}`
+                }
               }
             )
           )
@@ -408,13 +419,65 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   loadModel() {
-    tf.loadModel("indexeddb://my-model-1").then(res => {
+  //   tf.loadModel("indexeddb://my-model-1").then(res => {
+  //     this.model = res;
+  //   });
+    tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(res => {
       this.model = res;
     });
+  }
 
-    // tf.loadModel("https://firebasestorage.googleapis.com/v0/b/signlock-psyb.appspot.com/o/Moodyine?alt=media&token=8fda1bef-7542-4f0c-bd46-3f30521c1019").then(res => {
-    // console.log(res);  
-    // this.model = res;
-    // });
+  loadJson() {
+    const ref = this.storage.ref("jsonmodel1");
+    this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
+      ref.getDownloadURL().subscribe(item => {
+        console.log(item);
+        fetch(item, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
+        })
+          .then(response => {
+            console.log(response);
+            return response.blob();
+          })
+          .then(blob => {
+            this.jsonFile = new File([blob], "jsonFile");
+            console.log(this.fileName1);
+            this.donejson = true;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      });
+    });
+  }
+
+  loadWeights() {
+    const ref = this.storage.ref("jsonmodel2");
+    this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
+      ref.getDownloadURL().subscribe(item => {
+        console.log(item);
+        fetch(item, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          }
+        })
+          .then(response => {
+            console.log(response);
+            return response.blob();
+          })
+          .then(blob => {
+            this.weightsFile = new File([blob], "my-model-1.weights.bin");
+            console.log(this.weightsFile);
+            this.doneweights = true;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      });
+    });
   }
 }
