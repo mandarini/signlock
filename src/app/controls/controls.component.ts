@@ -245,10 +245,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         }
       }
     });
-
-    this.model.save("downloads://my-model-1").then(result => {
-      console.log(result);
-    });
   }
 
   trainStatus(status: string) {
@@ -303,5 +299,17 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.examples[this.CONTROLS[label]]++;
     await tf.nextFrame();
     document.body.removeAttribute("data-active");
+  }
+
+  saveModel() {
+    this.model.save("indexeddb://my-model-1").then(res => {
+      console.log(res);
+    });
+  }
+
+  loadModel() {
+    tf.loadModel("indexeddb://my-model-1").then(res => {
+      this.model = res;
+    })
   }
 }
