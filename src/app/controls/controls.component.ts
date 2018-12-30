@@ -89,7 +89,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
   }
-  
+
   addItem(item: Item) {
     this.itemsCollection.add(item);
   }
@@ -246,7 +246,9 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       }
     });
 
-    await this.model.save("downloads://my-model-1");
+    this.model.save("downloads://my-model-1").then(result => {
+      console.log(result);
+    });
   }
 
   trainStatus(status: string) {
