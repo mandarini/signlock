@@ -13,6 +13,7 @@ import {
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
+import { AngularFireAuth } from "@angular/fire/auth";
 
 export interface Item {
   name: string;
@@ -84,7 +85,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
     this.itemsCollection = afs.collection<Item>("items");
     this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
@@ -305,11 +306,47 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.model.save("indexeddb://my-model-1").then(res => {
       console.log(res);
     });
+
+    let user = this.afAuth.auth.currentUser;
+    console.log(user);
+    this.afAuth.auth.currentUser
+      .getIdToken(true)
+      .then(idToken => {
+        console.log(idToken);
+        this.model
+          .save(
+            tf.io.browserHTTPRequest(
+              "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki",
+              {
+                method: "PUT",
+                headers: { "Authorization": `Bearer ${idToken}` }
+              }
+            )
+          )
+          .then(res => {
+            console.log("success", res);
+          })
+          .catch(err => {
+            console.error("whoops", err);
+          });
+      })
+      .catch(error => {
+        // Handle error
+        console.error("no token", error);
+      });
+
+    // this.model.save(tf.io.browserHTTPRequest(
+    //   'https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki',
+    //   {method: 'POST', headers: {'Authorization': 'Bearer'}})).then(res => {
+    //     console.log('success', res)
+    //   }).catch(err => {
+    //     console.error('whoops', err);
+    //   });
   }
 
   loadModel() {
     tf.loadModel("indexeddb://my-model-1").then(res => {
       this.model = res;
-    })
+    });
   }
 }
