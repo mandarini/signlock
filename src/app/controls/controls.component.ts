@@ -15,9 +15,9 @@ import {
 import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 
-export interface Item {
-  name: string;
-}
+// export interface Item {
+//   name: string;
+// }
 
 @Component({
   selector: "app-controls",
@@ -82,18 +82,18 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("downThumb") downThumb: ElementRef;
 
   BUTTONS: Array<ElementRef>;
-  private itemsCollection: AngularFirestoreCollection<Item>;
-  items: Observable<Item[]>;
+  private itemsCollection: AngularFirestoreCollection<any>;
+  items: Observable<any[]>;
 
   constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
-    this.itemsCollection = afs.collection<Item>("items");
+    this.itemsCollection = afs.collection<any>("items");
     this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
   }
 
-  addItem(item: Item) {
-    this.itemsCollection.add(item);
-  }
+  // addItem(item: Item) {
+  //   this.itemsCollection.add(item);
+  // }
 
   ngOnInit() {
     this.init();
@@ -309,17 +309,55 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
     let user = this.afAuth.auth.currentUser;
     console.log(user);
+    console.log(this.model, JSON.stringify(this.model));
+    let data = {
+      name: "katerina",
+      size: "Small",
+      model: JSON.stringify(this.model)
+    };
+    this.itemsCollection.add(data);
+
+
     this.afAuth.auth.currentUser
       .getIdToken(true)
       .then(idToken => {
         console.log(idToken);
+
+  
+
+        // fetch(
+        //   "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/?documentId=katerinaki",
+        //   {
+        //     method: "PUT", // *GET, POST, PUT, DELETE, etc.
+        //     // mode: "cors", // no-cors, cors, *same-origin
+        //     // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        //     // credentials: "same-origin", // include, *same-origin, omit
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       Authorization: `Bearer ${idToken}`
+        //       // "Content-Type": "application/x-www-form-urlencoded",
+        //     },
+        //     // redirect: "follow", // manual, *follow, error
+        //     // referrer: "no-referrer", // no-referrer, *client
+        //     body: JSON.stringify(data) // body data type must match "Content-Type" header
+        //   }
+        // )
+        //   .then(response => {
+        //     response.json();
+        //     console.log(response);
+        //   })
+        //   .catch(err => {
+        //     console.error(err);
+        //   });
+
         this.model
           .save(
             tf.io.browserHTTPRequest(
-              "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki",
+              // "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki",
+              "https://www.googleapis.com/upload/storage/v1/b/signlock-psyb.appspot.com/o",
               {
-                method: "PUT",
-                headers: { "Authorization": `Bearer ${idToken}` }
+                method: "POST",
+                headers: { Authorization: `Bearer ${idToken}` }
               }
             )
           )
