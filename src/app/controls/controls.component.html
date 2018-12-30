@@ -207,4 +207,9 @@
 </div>
 <!-- /#controller -->
 <button (click)="saveModel()">save trained model</button>
-<button (click)="laodModel()">load saved model</button>
+<button (click)="loadModel()">load saved model</button>
+<input type="text" [(ngModel)]="fileName1" placeholder="Insert Mood name for File1"> 
+<input type="file" #moodFile (change)="uploadFile($event)">
+<input type="text" [(ngModel)]="fileName2" placeholder="Insert Mood name for File2"> 
+<input type="file" (change)="uploadFile($event)">
+

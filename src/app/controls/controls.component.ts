@@ -14,6 +14,7 @@ import {
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFireStorage } from "@angular/fire/storage";
 
 // export interface Item {
 //   name: string;
@@ -80,12 +81,20 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("rightThumb") rightThumb: ElementRef;
   @ViewChild("upThumb") upThumb: ElementRef;
   @ViewChild("downThumb") downThumb: ElementRef;
+  @ViewChild("moodFile") moodFile: ElementRef;
 
   BUTTONS: Array<ElementRef>;
   private itemsCollection: AngularFirestoreCollection<any>;
   items: Observable<any[]>;
 
-  constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
+  fileName1: string;
+  fileName2: string;
+
+  constructor(
+    private afs: AngularFirestore,
+    public afAuth: AngularFireAuth,
+    private storage: AngularFireStorage
+  ) {
     this.itemsCollection = afs.collection<any>("items");
     this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
@@ -93,7 +102,22 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   // addItem(item: Item) {
   //   this.itemsCollection.add(item);
-  // }
+  // }\
+  uploadFile(event) {
+    console.log('file',this.moodFile.nativeElement.files[0]);
+    console.log(event, 'file',event.target.files[0]);
+    console.log("uploading");
+    const file = event.target.files[0];
+    const filePath = this.fileName1;
+    const ref = this.storage.ref(filePath);
+    const task = ref.put(file);
+    console.log(task);
+    task.then(res=> {
+      console.log(res);
+    }).catch(err=>{
+      console.error(err);
+    })
+  }
 
   ngOnInit() {
     this.init();
@@ -306,24 +330,23 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.model.save("indexeddb://my-model-1").then(res => {
       console.log(res);
     });
-
-    let user = this.afAuth.auth.currentUser;
-    console.log(user);
-    console.log(this.model, JSON.stringify(this.model));
-    let data = {
-      name: "katerina",
-      size: "Small",
-      model: JSON.stringify(this.model)
-    };
-    this.itemsCollection.add(data);
-
+    this.model.save("downloads://my-model-1").then(res => {
+      console.log(res);
+    });
+    // let user = this.afAuth.auth.currentUser;
+    // console.log(user);
+    // console.log(this.model, JSON.stringify(this.model));
+    // let data = {
+    //   name: "katerina",
+    //   size: "Small",
+    //   model: JSON.stringify(this.model)
+    // };
+    // this.itemsCollection.add(data);
 
     this.afAuth.auth.currentUser
       .getIdToken(true)
       .then(idToken => {
         console.log(idToken);
-
-  
 
         // fetch(
         //   "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/?documentId=katerinaki",
@@ -348,16 +371,18 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         //   })
         //   .catch(err => {
         //     console.error(err);
-        //   });
+        // //   });
 
         this.model
           .save(
             tf.io.browserHTTPRequest(
               // "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki",
-              "https://www.googleapis.com/upload/storage/v1/b/signlock-psyb.appspot.com/o",
+              "https://firebasestorage.googleapis.com/v0/b/signlock-psyb.appspot.com/o?name=jsontestnew",
               {
                 method: "POST",
-                headers: { Authorization: `Bearer ${idToken}` }
+                headers: { 
+                  "Content-Type": "application/json; charset=UTF-8",
+                  Authorization: `Firebase ${idToken}` }
               }
             )
           )
@@ -386,5 +411,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     tf.loadModel("indexeddb://my-model-1").then(res => {
       this.model = res;
     });
+
+    // tf.loadModel("https://firebasestorage.googleapis.com/v0/b/signlock-psyb.appspot.com/o/Moodyine?alt=media&token=8fda1bef-7542-4f0c-bd46-3f30521c1019").then(res => {
+    // console.log(res);  
+    // this.model = res;
+    // });
   }
 }
