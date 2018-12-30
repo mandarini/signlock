@@ -428,7 +428,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   loadJson() {
-    const ref = this.storage.ref("jsonmodel1");
+    const ref = this.storage.ref("trainedjson");
     this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
       ref.getDownloadURL().subscribe(item => {
         console.log(item);
@@ -455,7 +455,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   loadWeights() {
-    const ref = this.storage.ref("jsonmodel2");
+    const ref = this.storage.ref("trainedweights");
     this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
       ref.getDownloadURL().subscribe(item => {
         console.log(item);
