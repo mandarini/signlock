@@ -12,13 +12,15 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from "../environments/environment";
+import { PersonalComponent } from './personal/personal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateComponent,
     ControlsComponent,
-    HomeComponent
+    HomeComponent,
+    PersonalComponent
   ],
   imports: [
     BrowserModule,
