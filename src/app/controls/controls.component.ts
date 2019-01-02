@@ -22,12 +22,12 @@ import { AngularFireStorage } from "@angular/fire/storage";
   styleUrls: ["./controls.component.scss"]
 })
 export class ControlsComponent implements AfterViewInit, OnInit {
-  CONTROLS: Array<string> = ["up", "down", "left", "right"];
+  CONTROLS: Array<string> = ["first", "second", "third", "control"];
   examples: Object = {
-    up: 0,
-    down: 0,
-    left: 0,
-    right: 0
+    first: 0,
+    second: 0,
+    third: 0,
+    control: 0
   };
   CONTROL_CODES: Array<number> = [38, 40, 37, 39];
   NUM_CLASSES: number = 4;
@@ -73,10 +73,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("trainStatus") trainStatusEl: ElementRef;
   @ViewChild("status") statusEl: ElementRef;
   @ViewChild("webcam") webcamEl: ElementRef;
-  @ViewChild("leftThumb") leftThumb: ElementRef;
-  @ViewChild("rightThumb") rightThumb: ElementRef;
-  @ViewChild("upThumb") upThumb: ElementRef;
-  @ViewChild("downThumb") downThumb: ElementRef;
+  @ViewChild("thirdThumb") thirdThumb: ElementRef;
+  @ViewChild("controlThumb") controlThumb: ElementRef;
+  @ViewChild("firstThumb") firstThumb: ElementRef;
+  @ViewChild("secondThumb") secondThumb: ElementRef;
   @ViewChild("moodFile") moodFile: ElementRef;
 
   BUTTONS: Array<ElementRef>;
@@ -126,10 +126,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     console.log("hey");
     this.BUTTONS = [
-      this.upThumb,
-      this.downThumb,
-      this.leftThumb,
-      this.rightThumb
+      this.firstThumb,
+      this.secondThumb,
+      this.thirdThumb,
+      this.controlThumb
     ];
     this.webcam = new Webcam(this.webcamEl.nativeElement);
     this.webcam

@@ -106,11 +106,10 @@
                 class="thumb"
                 width="224"
                 height="224"
-                id="up-thumb"
-                #upThumb
+                #firstThumb
               ></canvas>
             </div>
-            <button class="record-button" id="up" #up (click)="handler(0)">
+            <button class="record-button" #first (click)="handler(0)">
               <span>Add Sample</span>
             </button>
           </div>
@@ -132,11 +131,10 @@
                 class="thumb"
                 width="224"
                 height="224"
-                id="left-thumb"
-                #leftThumb
+                #thirdThumb
               ></canvas>
             </div>
-            <button class="record-button" id="left" #left (click)="handler(2)">
+            <button class="record-button" #third (click)="handler(2)">
               <span>Add Sample</span>
             </button>
           </div>
@@ -158,11 +156,10 @@
                 class="thumb"
                 width="224"
                 height="224"
-                id="right-thumb"
-                #rightThumb
+                #controlThumb
               ></canvas>
             </div>
-            <button class="record-button" id="right" #right (click)="handler(3)">
+            <button class="record-button" #control (click)="handler(3)">
               <span>Add Sample</span>
             </button>
           </div>
@@ -185,11 +182,10 @@
                 class="thumb"
                 width="224"
                 height="224"
-                id="down-thumb"
-                #downThumb
+                #secondThumb
               ></canvas>
             </div>
-            <button class="record-button" id="down" #down (click)="handler(1)">
+            <button class="record-button" #second (click)="handler(1)">
               <span>Add Sample</span>
             </button>
           </div>
@@ -210,8 +206,7 @@
 <button (click)="loadJson()" [disabled]="false">load json</button>
 <button (click)="loadWeights()" [disabled]="!donejson">load weights</button>
 <button (click)="loadModel()" [disabled]="!doneweights">load saved model</button>
-<input type="text" [(ngModel)]="fileName1" placeholder="Insert Mood name for File1"> 
+<input type="text" [(ngModel)]="fileName1" placeholder="Insert Mood name for File1">
 <input type="file" #moodFile (change)="uploadFile($event, fileName1)">
-<input type="text" [(ngModel)]="fileName2" placeholder="Insert Mood name for File2"> 
+<input type="text" [(ngModel)]="fileName2" placeholder="Insert Mood name for File2">
 <input type="file" (change)="uploadFile($event, fileName2)">
-
