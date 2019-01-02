@@ -1,0 +1,38 @@
+.thumb-box {
+  background-color: black;
+  border: 1px black solid;
+  height: 224px;
+  width: 224px;
+
+  canvas {
+    width: 224px;
+    height: 224px;
+  }
+}
+
+.camera {
+  transform: scaleX(-1);
+}
+
+.webcam-box-outer {
+  background: black;
+  border: 1px solid #585858;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 9px;
+
+  .webcam-box-inner {
+    border: 1px solid #585858;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 160px;
+  }
+
+  video {
+    height: 160px;
+  }
+}

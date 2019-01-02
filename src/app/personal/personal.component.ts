@@ -21,19 +21,18 @@ import { AngularFireStorage } from "@angular/fire/storage";
   styleUrls: ["./personal.component.scss"]
 })
 export class PersonalComponent implements AfterViewInit, OnInit {
-  CONTROLS: Array<string> = ["up", "down", "left", "right"];
+  CONTROLS: Array<string> = ["first", "second", "third", "none"];
   @ViewChild("webcam") webcamEl: ElementRef;
+  @ViewChild("captImg") captImg: ElementRef;
+  @ViewChild("first") first: ElementRef;
+  @ViewChild("second") second: ElementRef;
+  @ViewChild("third") third: ElementRef;
+  captImgEl: any;
   loading: boolean = true;
-  model: any;
-  examples: Object = {
-    up: 0,
-    down: 0,
-    left: 0,
-    right: 0
-  };
-  CONTROL_CODES: Array<number> = [38, 40, 37, 39];
-  NUM_CLASSES: number = 4;
+
+  SIGNS: Array<ElementRef>;
   webcam: Webcam;
+  model: any;
 
   private itemsCollection: AngularFirestoreCollection<any>;
   items: Observable<any[]>;
@@ -64,7 +63,8 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    console.log("hey");
+    this.SIGNS = [this.first, this.second, this.third];
+    console.log("hey", this.webcamEl);
     this.webcam = new Webcam(this.webcamEl.nativeElement);
     this.webcam
       .setup()
@@ -74,35 +74,44 @@ export class PersonalComponent implements AfterViewInit, OnInit {
       .catch(() => {
         this.haswebcam = false;
       });
-
-    const img = this.webcam.capture();
-    this.drawThumb(img, label);
+    // const img = this.webcam.capture();
   }
 
-  predictBtn() {
-    this.isPredicting = true;
-    this.predict();
-  }
-
-  async predict() {
-    this.predictingVisible = true;
-    console.log("predicting");
-    while (this.isPredicting) {
-      const predictedClass = tf.tidy(() => {
-        const img = this.webcam.capture();
-        const embeddings = this.truncatedMobileNet.predict(img);
-        const predictions = this.model.predict(embeddings);
-        return predictions.as1D().argMax();
-      });
-
-      const classId = (await predictedClass.data())[0];
-      predictedClass.dispose();
-      console.log("moving ", this.CONTROLS[classId]);
-
-      document.body.setAttribute("data-active", this.CONTROLS[classId]);
-      await tf.nextFrame();
+  draw(image, id) {
+    const [width, height] = [224, 224];
+    const ctx = this.SIGNS[id].nativeElement.getContext("2d");
+    const imageData = new ImageData(width, height);
+    const data = image.dataSync();
+    for (let i = 0; i < height * width; ++i) {
+      const j = i * 4;
+      imageData.data[j + 0] = (data[i * 3 + 0] + 1) * 127;
+      imageData.data[j + 1] = (data[i * 3 + 1] + 1) * 127;
+      imageData.data[j + 2] = (data[i * 3 + 2] + 1) * 127;
+      imageData.data[j + 3] = 255;
     }
-    this.predictingVisible = false;
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  predictBtn(id: number) {
+    this.predict(id);
+  }
+
+  async predict(id: number) {
+    // this.predictingVisible = true;
+    console.log("predicting");
+    // while (this.isPredicting) {
+    const predictedClass = tf.tidy(() => {
+      const img = this.webcam.capture();
+      this.draw(img, id);
+      const embeddings = this.truncatedMobileNet.predict(img);
+      const predictions = this.model.predict(embeddings);
+      return predictions.as1D().argMax();
+    });
+
+    const classId = (await predictedClass.data())[0];
+    predictedClass.dispose();
+    console.log("captured ", this.CONTROLS[classId]);
+    await tf.nextFrame();
   }
 
   async init() {

@@ -1,2 +1,46 @@
+<div class="webcam-box-outer">
+  <div class="webcam-box-inner">
+    <video
+      autoplay
+      playsinline
+      muted
+      class="camera"
+      #webcam
+      width="224"
+      height="224"
+    ></video>
+  </div>
+</div>
+<div class="thumb-box">
+  <canvas
+    class="camera"
+    width="224"
+    height="224"
+    #first
+    (click)="predictBtn(0)"
+  ></canvas>
+</div>
+<div class="thumb-box">
+  <canvas
+    class="camera"
+    width="224"
+    height="224"
+    #second
+(click)="predictBtn(1)"
+></canvas>
+</div>
+<div class="thumb-box">
+  <canvas
+    class="camera"
+    width="224"
+    height="224"
+    #third
+(click)="predictBtn(2)"
+></canvas>
+</div>
 <p *ngIf="loading">Still loading</p>
-<div *ngIf="!loading"></div>
+<div *ngIf="!loading">
+  <button (click)="loadJson()" [disabled]="false">load json</button>
+  <button (click)="loadWeights()" [disabled]="!donejson">load weights</button>
+  <button (click)="loadModel()" [disabled]="!doneweights">load saved model</button>
+</div>

@@ -1,18 +1,24 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { CreateComponent } from './create/create.component';
-import { HomeComponent } from './home/home.component';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { CreateComponent } from "./create/create.component";
+import { HomeComponent } from "./home/home.component";
+import { PersonalComponent } from "./personal/personal.component";
 
 const routes: Routes = [
   { path: "*", redirectTo: "home" },
   {
     path: "home",
-    component: HomeComponent,
+    component: HomeComponent
     // canActivate: [AppAuthGuard]
   },
   {
     path: "create",
-    component: CreateComponent,
+    component: CreateComponent
+    // canActivate: [AppAuthGuard]
+  },
+  {
+    path: "personal",
+    component: PersonalComponent
     // canActivate: [AppAuthGuard]
   }
 ];
@@ -21,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
