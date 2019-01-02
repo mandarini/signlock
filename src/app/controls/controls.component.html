@@ -1,19 +1,7 @@
 <div id="status" #status *ngIf="predictingVisible">Loading mobilenet...</div>
-<button (click)="addItem({name:'katerina'})">ADD TEST</button>
 <div class="controller-panels" id="controller" #controller style="display:none">
   <div class="panel training-panel">
     <!-- Big buttons. -->
-    <div class="panel-row big-buttons">
-      <button (click)="trainBtn()">
-        <img width="66" height="66" src="assets/images/button.svg" />
-        <span id="train-status" #trainStatus>TRAIN MODEL</span>
-      </button>
-      <button (click)="predictBtn()">
-        <img width="66" height="66" src="assets/images/button.svg" />
-        <span>PLAY</span>
-      </button>
-    </div>
-    <!-- /.panel-row -->
 
     <div class="panel-row params-webcam-row">
       <!-- Hyper params. -->
@@ -58,11 +46,11 @@
         <div class="dropdown">
           <label>Hidden units</label>
           <div class="select">
-              <select #denseUnits type="number" [(ngModel)]="denseSel">
-                  <option *ngFor="let opt of hiddenUnits" [ngValue]="opt.num">{{
-                    opt.name
-                  }}</option>
-                </select>
+            <select #denseUnits type="number" [(ngModel)]="denseSel">
+              <option *ngFor="let opt of hiddenUnits" [ngValue]="opt.num">{{
+                opt.name
+              }}</option>
+            </select>
           </div>
         </div>
       </div>
@@ -85,128 +73,139 @@
     <!-- /.panel-row -->
   </div>
   <!-- /.panel -->
-
-  <div class="panel joystick-panel">
-    <div class="panel-row panel-row-top">
-      <div class="panel-cell panel-cell-left panel-cell-fill">
-        <p class="help-text">
-          Click to add the <br />
-          current camera <br />
-          view as an example <br />
-          for that control
-        </p>
-      </div>
-      <!-- ./panel-cell -->
-
-      <div class="panel-cell panel-cell-center">
-        <div class="thumb-box">
-          <div class="thumb-box-outer">
-            <div class="thumb-box-inner">
-              <canvas
-                class="thumb"
-                width="224"
-                height="224"
-                #firstThumb
-              ></canvas>
-            </div>
-            <button class="record-button" #first (click)="handler(0)">
-              <span>Add Sample</span>
-            </button>
+  <div class="signs">
+    <p class="help-text">
+      Click to add the current camera view as an example for that control
+    </p>
+    <div class="signs-examples">
+      <div class="thumb-box">
+        <p>
+          First Secret Sign
+          </p>
+        <div class="thumb-box-outer">
+          <div class="thumb-box-inner">
+            <canvas class="thumb" width="224" height="224" #firstThumb></canvas>
           </div>
-          <p>{{examples.up}} examples</p>
+          <button class="record-button" #first (click)="handler(0)">
+            <span>Add Sample</span>
+          </button>
         </div>
+        <p>{{ examples.up }} examples</p>
       </div>
-      <!-- ./panel-cell -->
 
-      <div class="panel-cell panel-cell-right panel-cell-fill"></div>
-      <!-- ./panel-cell -->
+      <div class="thumb-box">
+        <p>
+          Second Secret Sign
+          </p>
+        <div class="thumb-box-outer">
+          <div class="thumb-box-inner">
+            <canvas
+              class="thumb"
+              width="224"
+              height="224"
+              #secondThumb
+            ></canvas>
+          </div>
+          <button class="record-button" #second (click)="handler(1)">
+            <span>Add Sample</span>
+          </button>
+        </div>
+        <p>{{ examples.down }} examples</p>
+      </div>
+
+      <div class="thumb-box">
+        <p>
+          Third Secret Sign
+          </p>
+        <div class="thumb-box-outer">
+          <div class="thumb-box-inner">
+            <canvas class="thumb" width="224" height="224" #thirdThumb></canvas>
+          </div>
+          <button class="record-button" #third (click)="handler(2)">
+            <span>Add Sample</span>
+          </button>
+        </div>
+        <p>{{ examples.left }} examples</p>
+      </div>
+
+      <div class="thumb-box">
+        <p>
+          Neutral
+          </p>
+        <div class="thumb-box-outer">
+          <div class="thumb-box-inner">
+            <canvas
+              class="thumb"
+              width="224"
+              height="224"
+              #controlThumb
+            ></canvas>
+          </div>
+          <button class="record-button" #control (click)="handler(3)">
+            <span>Add Sample</span>
+          </button>
+        </div>
+        <p>{{ examples.right }} examples</p>
+      </div>
+
+
     </div>
-    <!-- /.panel-row -->
-    <div class="panel-row panel-row-middle">
-      <div class="panel-cell panel-cell-left">
-        <div class="thumb-box">
-          <div class="thumb-box-outer">
-            <div class="thumb-box-inner">
-              <canvas
-                class="thumb"
-                width="224"
-                height="224"
-                #thirdThumb
-              ></canvas>
-            </div>
-            <button class="record-button" #third (click)="handler(2)">
-              <span>Add Sample</span>
-            </button>
-          </div>
-          <p>{{examples.left}} examples</p>
-        </div>
-      </div>
-      <!-- ./panel-cell -->
-
-      <div class="panel-cell panel-cell-center panel-cell-fill">
-        <img height="108" width="129" src="assets/images/joystick.png" />
-      </div>
-      <!-- ./panel-cell -->
-
-      <div class="panel-cell panel-cell-right">
-        <div class="thumb-box">
-          <div class="thumb-box-outer">
-            <div class="thumb-box-inner">
-              <canvas
-                class="thumb"
-                width="224"
-                height="224"
-                #controlThumb
-              ></canvas>
-            </div>
-            <button class="record-button" #control (click)="handler(3)">
-              <span>Add Sample</span>
-            </button>
-          </div>
-          <p>{{examples.right}} examples</p>
-        </div>
-      </div>
-      <!-- ./panel-cell -->
-    </div>
-    <!-- /.panel-row -->
-
-    <div class="panel-row panel-row-bottom">
-      <div class="panel-cell panel-cell-left panel-cell-fill"></div>
-      <!-- ./panel-cell -->
-
-      <div class="panel-cell panel-cell-center">
-        <div class="thumb-box">
-          <div class="thumb-box-outer">
-            <div class="thumb-box-inner">
-              <canvas
-                class="thumb"
-                width="224"
-                height="224"
-                #secondThumb
-              ></canvas>
-            </div>
-            <button class="record-button" #second (click)="handler(1)">
-              <span>Add Sample</span>
-            </button>
-          </div>
-          <p>{{examples.down}} examples</p>
-        </div>
-      </div>
-      <!-- ./panel-cell -->
-
-      <div class="panel-cell panel-cell-right panel-cell-fill"></div>
-      <!-- ./panel-cell -->
-    </div>
-    <!-- /.panel-row -->
   </div>
-  <!-- /.panel -->
+  <div class="panel-row big-buttons">
+    <button mat-raised-button color="primary" (click)="trainBtn()">
+      <span id="train-status" #trainStatus>TRAIN MODEL</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="predictBtn()">
+      CHECK
+    </button>
+  </div>
 </div>
-<!-- /#controller -->
-<button (click)="saveModel()">save trained model</button>
-<button (click)="loadJson()" [disabled]="false">load json</button>
-<button (click)="loadWeights()" [disabled]="!donejson">load weights</button>
-<button (click)="loadModel()" [disabled]="!doneweights">load saved model</button>
-<input type="text" [(ngModel)]="fileName1" placeholder="Insert Mood name for File1">
-<input type="file" #moodFile (change)="uploadFile($event, fileName1)">
-<input type="text" [(ngModel)]="fileName2" placeholder="Insert Mood name for File2">
-<input type="file" (change)="uploadFile($event, fileName2)">
+<div class="all-buttons">
+  <p>
+    <button mat-raised-button color="primary" (click)="saveModel()">
+      save trained model
+    </button>
+  </p>
+
+  <p>
+    <input matInput
+      type="text"
+      [(ngModel)]="fileName1"
+      placeholder="Insert Mood name for File1"
+    />
+    <input type="file" #moodFile (change)="uploadFile($event, fileName1)" />
+    <input matInput
+      type="text"
+      [(ngModel)]="fileName2"
+      placeholder="Insert Mood name for File2"
+    />
+    <input type="file" (change)="uploadFile($event, fileName2)" />
+  </p>
+
+  <!-- <p>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadJson()"
+      [disabled]="false"
+    >
+      load json
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadWeights()"
+      [disabled]="!donejson"
+    >
+      load weights
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadModel()"
+      [disabled]="!doneweights"
+    >
+      load saved model
+    </button>
+  </p> -->
+</div>

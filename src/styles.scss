@@ -16,6 +16,8 @@
  * =============================================================================
  */
 
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 html,
 body {
   font-family: "Roboto", sans-serif;
@@ -26,10 +28,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-button:focus {
-  outline: 0;
-}
-
 /** Page header. **/
 header {
   background-color: #ef6c00;

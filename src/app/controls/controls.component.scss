@@ -8,10 +8,11 @@
 
 /** Controls. **/
 .controller-panels {
-  background: #2a2a2a;
+  // background: #2a2a2a;
   display: flex;
-  flex-direction: row;
-  margin: 9px auto 0;
+  flex-direction: column;
+  margin: 9px auto;
+  align-items: center;
 }
 .panel {
   box-sizing: border-box;
@@ -20,47 +21,17 @@
   flex-grow: 1;
   flex-shrink: 0;
 }
-.panel:first-child {
-  border-right: 1px dashed #565656;
-  padding: 0 22px 0 13px;
-  width: 396px;
-}
-.panel:last-child {
-  padding: 0 9px 0 22px;
-  width: 353px;
-}
-.panel-row {
-  display: flex;
-  flex-direction: row;
-}
-.panel-cell {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 0;
-  justify-content: center;
-  position: relative;
-}
-.panel-cell-fill {
-  flex-grow: 1;
-}
-.panel-cell p {
-  color: #8b8b8b;
-  font-size: 10px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.controller-panels button {
-  background: none;
-  border: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  margin: 0;
-  padding: 0;
-}
-#train-status {
-  width: 124px;
+
+.signs-examples {
+  button {
+    background: none;
+    border: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+  }
 }
 
 /** Training panel. **/
@@ -72,18 +43,7 @@
   display: flex;
   flex-direction: row;
 }
-.big-buttons button span {
-  border-bottom: 2px solid #484848;
-  border-top: 2px solid #484848;
-  color: #aaa;
-  display: inline-block;
-  font-size: 18px;
-  font-weight: 500;
-  padding: 9px 11px;
-  text-align: left;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
+
 .params-webcam-row {
   align-items: flex-start;
   display: flex;
@@ -166,30 +126,15 @@
   pointer-events: none;
 }
 
-/** Joystick panel. **/
-.joystick-panel {
-  margin-top: 13px;
+.signs {
+  display: flex;
+  flex-direction: column;
+  .signs-examples {
+    display: flex;
+    flex-direction: row;
+  }
 }
-.panel-cell .help-text {
-  font-size: 10px;
-  font-style: italic;
-  left: 0;
-  line-height: 1.1;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  top: 0;
-  position: absolute;
-}
-.panel-row-top .panel-cell-left {
-  // background: url("assets/images/pointer.svg");
-  // background-repeat: no-repeat;
-  // background-size: 38%;
-  // background-position: 98% 46%;
-}
-.panel-row-middle .panel-cell {
-  height: 132px;
-}
+
 .thumb-box {
   display: inline-block;
 }
@@ -206,12 +151,7 @@
   position: relative;
   transition: box-shadow 0.3s;
 }
-[data-active="up"] .panel-row-top .thumb-box-outer,
-[data-active="down"] .panel-row-bottom .thumb-box-outer,
-[data-active="left"] .panel-cell-left .thumb-box-outer,
-[data-active="right"] .panel-cell-right .thumb-box-outer {
-  box-shadow: 0 0 4px 4px #ffaa00;
-}
+
 .thumb-box-inner {
   border: 1px solid #585858;
   border-radius: 4px;
@@ -246,10 +186,9 @@
   opacity: 0.5;
 }
 
-/** Footer. **/
-#copyright {
-  color: #f8f8f8;
-  font-weight: 300;
-  margin: 12px 0;
-  text-align: center;
+.all-buttons {
+  padding: 16px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
 }

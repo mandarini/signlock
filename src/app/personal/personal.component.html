@@ -26,8 +26,8 @@
     width="224"
     height="224"
     #second
-(click)="predictBtn(1)"
-></canvas>
+    (click)="predictBtn(1)"
+  ></canvas>
 </div>
 <div class="thumb-box">
   <canvas
@@ -35,12 +35,35 @@
     width="224"
     height="224"
     #third
-(click)="predictBtn(2)"
-></canvas>
+    (click)="predictBtn(2)"
+  ></canvas>
 </div>
 <p *ngIf="loading">Still loading</p>
 <div *ngIf="!loading">
-  <button (click)="loadJson()" [disabled]="false">load json</button>
-  <button (click)="loadWeights()" [disabled]="!donejson">load weights</button>
-  <button (click)="loadModel()" [disabled]="!doneweights">load saved model</button>
+  <p>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadJson()"
+      [disabled]="false"
+    >
+      load json
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadWeights()"
+      [disabled]="!donejson"
+    >
+      load weights
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loadModel()"
+      [disabled]="!doneweights"
+    >
+      load saved model
+    </button>
+  </p>
 </div>
