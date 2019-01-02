@@ -16,10 +16,6 @@ import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireStorage } from "@angular/fire/storage";
 
-// export interface Item {
-//   name: string;
-// }
-
 @Component({
   selector: "app-controls",
   templateUrl: "./controls.component.html",
@@ -106,11 +102,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
   }
 
-  // addItem(item: Item) {
-  //   this.itemsCollection.add(item);
-  // }\
   uploadFile(event, name) {
-    // console.log("file", this.moodFile.nativeElement.files[0]);
     console.log(event, "file", event.target.files[0]);
     console.log("uploading", name);
     const file = event.target.files[0];
@@ -156,7 +148,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
           label
         );
 
-        // Draw the preview thumbnail.
         this.drawThumb(img, label);
       });
     });
@@ -178,8 +169,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     const mobilenet = await tf.loadModel(
       "https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json"
     );
-
-    // Return a model that outputs an internal activation.
     const layer = mobilenet.getLayer("conv_pw_13_relu");
     return tf.model({ inputs: mobilenet.inputs, outputs: layer.output });
   }
@@ -245,20 +234,11 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       ]
     });
 
-    // Creates the optimizers which drives training of the model.
     const optimizer = tf.train.adam(this.learningRateSel);
-    // We use categoricalCrossentropy which is the loss function we use for
-    // categorical classification which measures the error between our predicted
-    // probability distribution over classes (probability that an input is of each
-    // class), versus the label (100% probability in the true class)>
     this.model.compile({
       optimizer: optimizer,
       loss: "categoricalCrossentropy"
     });
-
-    // We parameterize batch size as a fraction of the entire dataset because the
-    // number of examples that are collected depends on how many examples the user
-    // collects. This allows us to have a flexible batch size.
     const batchSize = Math.floor(
       this.controllerDataset.xs.shape[0] * this.batchSizeSel
     );
@@ -267,8 +247,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         `Batch size is 0 or NaN. Please choose a non-zero fraction.`
       );
     }
-
-    // Train the model! Model.fit() will shuffle xs & ys so we don't have to.
     this.model.fit(this.controllerDataset.xs, this.controllerDataset.ys, {
       batchSize,
       epochs: +this.epochSel,
@@ -288,19 +266,9 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     console.log("predicting");
     while (this.isPredicting) {
       const predictedClass = tf.tidy(() => {
-        // Capture the frame from the webcam.
         const img = this.webcam.capture();
-
-        // Make a prediction through mobilenet, getting the internal activation of
-        // the mobilenet model, i.e., "embeddings" of the input images.
         const embeddings = this.truncatedMobileNet.predict(img);
-
-        // Make a prediction through our newly-trained model using the embeddings
-        // from mobilenet as input.
         const predictions = this.model.predict(embeddings);
-
-        // Returns the index with the maximum probability. This number corresponds
-        // to the class the model thinks is the most probable given the input.
         return predictions.as1D().argMax();
       });
 
@@ -335,96 +303,27 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   saveModel() {
-    this.model.save("indexeddb://my-model-1").then(res => {
-      console.log(res);
-    });
     this.model.save("downloads://my-model-1").then(res => {
       console.log(res);
     });
-    // let user = this.afAuth.auth.currentUser;
-    // console.log(user);
-    // console.log(this.model, JSON.stringify(this.model));
-    // let data = {
-    //   name: "katerina",
-    //   size: "Small",
-    //   model: JSON.stringify(this.model)
-    // };
-    // this.itemsCollection.add(data);
 
     this.afAuth.auth.currentUser
       .getIdToken(true)
       .then(idToken => {
         console.log(idToken);
-
-        // fetch(
-        //   "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/?documentId=katerinaki",
-        //   {
-        //     method: "PUT", // *GET, POST, PUT, DELETE, etc.
-        //     // mode: "cors", // no-cors, cors, *same-origin
-        //     // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        //     // credentials: "same-origin", // include, *same-origin, omit
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       Authorization: `Bearer ${idToken}`
-        //       // "Content-Type": "application/x-www-form-urlencoded",
-        //     },
-        //     // redirect: "follow", // manual, *follow, error
-        //     // referrer: "no-referrer", // no-referrer, *client
-        //     body: JSON.stringify(data) // body data type must match "Content-Type" header
-        //   }
-        // )
-        //   .then(response => {
-        //     response.json();
-        //     console.log(response);
-        //   })
-        //   .catch(err => {
-        //     console.error(err);
-        // //   });
-
-        // This cannot work because only one file can be posted to firestore at a time
-
-        this.model
-          .save(
-            tf.io.browserHTTPRequest(
-              // "https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki",
-              "https://firebasestorage.googleapis.com/v0/b/signlock-psyb.appspot.com/o?name=jsontestnew",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json; charset=UTF-8",
-                  Authorization: `Firebase ${idToken}`
-                }
-              }
-            )
-          )
-          .then(res => {
-            console.log("success", res);
-          })
-          .catch(err => {
-            console.error("whoops", err);
-          });
       })
       .catch(error => {
         // Handle error
         console.error("no token", error);
       });
-
-    // this.model.save(tf.io.browserHTTPRequest(
-    //   'https://firestore.googleapis.com/v1beta1/projects/signlock-psyb/databases/(default)/documents/items/katerinaki',
-    //   {method: 'POST', headers: {'Authorization': 'Bearer'}})).then(res => {
-    //     console.log('success', res)
-    //   }).catch(err => {
-    //     console.error('whoops', err);
-    //   });
   }
 
   loadModel() {
-  //   tf.loadModel("indexeddb://my-model-1").then(res => {
-  //     this.model = res;
-  //   });
-    tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(res => {
-      this.model = res;
-    });
+    tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(
+      res => {
+        this.model = res;
+      }
+    );
   }
 
   loadJson() {
