@@ -75,13 +75,13 @@
   <!-- /.panel -->
   <div class="signs">
     <p class="help-text">
-      Click to add the current camera view as an example for that control
+      Add here a sequence of three secret signs you are going to use in order to
+      access your secret personal space! In the end, add a neutral sign, too,
+      for reference.
     </p>
     <div class="signs-examples">
       <div class="thumb-box">
-        <p>
-          First Secret Sign
-          </p>
+        <p>First Secret Sign</p>
         <div class="thumb-box-outer">
           <div class="thumb-box-inner">
             <canvas class="thumb" width="224" height="224" #firstThumb></canvas>
@@ -90,13 +90,10 @@
             <span>Add Sample</span>
           </button>
         </div>
-        <p>{{ examples.up }} examples</p>
       </div>
 
       <div class="thumb-box">
-        <p>
-          Second Secret Sign
-          </p>
+        <p>Second Secret Sign</p>
         <div class="thumb-box-outer">
           <div class="thumb-box-inner">
             <canvas
@@ -110,13 +107,10 @@
             <span>Add Sample</span>
           </button>
         </div>
-        <p>{{ examples.down }} examples</p>
       </div>
 
       <div class="thumb-box">
-        <p>
-          Third Secret Sign
-          </p>
+        <p>Third Secret Sign</p>
         <div class="thumb-box-outer">
           <div class="thumb-box-inner">
             <canvas class="thumb" width="224" height="224" #thirdThumb></canvas>
@@ -125,13 +119,10 @@
             <span>Add Sample</span>
           </button>
         </div>
-        <p>{{ examples.left }} examples</p>
       </div>
 
       <div class="thumb-box">
-        <p>
-          Neutral
-          </p>
+        <p>Neutral</p>
         <div class="thumb-box-outer">
           <div class="thumb-box-inner">
             <canvas
@@ -145,67 +136,45 @@
             <span>Add Sample</span>
           </button>
         </div>
-        <p>{{ examples.right }} examples</p>
       </div>
-
-
     </div>
   </div>
-  <div class="panel-row big-buttons">
+  <div class="big-buttons">
     <button mat-raised-button color="primary" (click)="trainBtn()">
-      <span id="train-status" #trainStatus>TRAIN MODEL</span>
+      <span id="train-status">{{trainStatus}}</span>
     </button>
-    <button mat-raised-button color="primary" (click)="predictBtn()">
-      CHECK
+    <button mat-raised-button color="primary" (click)="predictBtn()" [disabled]="!doneTraining">
+      <span *ngIf="!isPredicting">CHECK</span
+      ><span *ngIf="isPredicting">STOP</span>
+    </button>
+
+    <button mat-raised-button color="primary" (click)="saveModel()" [disabled]="!doneTraining">
+      DOWNLOAD MODEL
     </button>
   </div>
+  <p *ngIf="currentMove">
+    You are currently doing the <strong>{{ currentMove }}</strong> sign.
+  </p>
 </div>
 <div class="all-buttons">
   <p>
-    <button mat-raised-button color="primary" (click)="saveModel()">
-      save trained model
-    </button>
+
   </p>
 
   <p>
-    <input matInput
+    <input
+      matInput
       type="text"
       [(ngModel)]="fileName1"
       placeholder="Insert Mood name for File1"
     />
     <input type="file" #moodFile (change)="uploadFile($event, fileName1)" />
-    <input matInput
+    <input
+      matInput
       type="text"
       [(ngModel)]="fileName2"
       placeholder="Insert Mood name for File2"
     />
     <input type="file" (change)="uploadFile($event, fileName2)" />
   </p>
-
-  <!-- <p>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadJson()"
-      [disabled]="false"
-    >
-      load json
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadWeights()"
-      [disabled]="!donejson"
-    >
-      load weights
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadModel()"
-      [disabled]="!doneweights"
-    >
-      load saved model
-    </button>
-  </p> -->
 </div>

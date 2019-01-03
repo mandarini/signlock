@@ -36,12 +36,9 @@
 
 /** Training panel. **/
 .big-buttons {
-  justify-content: space-between;
-}
-.big-buttons button {
-  align-items: center;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .params-webcam-row {
@@ -129,9 +126,11 @@
 .signs {
   display: flex;
   flex-direction: column;
+  padding: 36px;
   .signs-examples {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
   }
 }
 

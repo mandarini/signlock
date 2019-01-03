@@ -23,12 +23,6 @@ import { AngularFireStorage } from "@angular/fire/storage";
 })
 export class ControlsComponent implements AfterViewInit, OnInit {
   CONTROLS: Array<string> = ["first", "second", "third", "control"];
-  examples: Object = {
-    first: 0,
-    second: 0,
-    third: 0,
-    control: 0
-  };
   CONTROL_CODES: Array<number> = [38, 40, 37, 39];
   NUM_CLASSES: number = 4;
   webcam: Webcam;
@@ -39,6 +33,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   thumbDisplayed: Object = {};
   isPredicting: boolean = false;
   predictingVisible: boolean = true;
+
+  currentMove: string;
 
   learningRates: Array<Object> = [
     { num: 0.00001, name: "0.00001" },
@@ -70,7 +66,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   denseSel: number = 100;
 
   @ViewChild("controller") controller: ElementRef;
-  @ViewChild("trainStatus") trainStatusEl: ElementRef;
   @ViewChild("status") statusEl: ElementRef;
   @ViewChild("webcam") webcamEl: ElementRef;
   @ViewChild("thirdThumb") thirdThumb: ElementRef;
@@ -91,6 +86,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   donejson: boolean = false;
   doneweights: boolean = false;
+
+  trainStatus: string = "TRAIN MODEL";
+  doneTraining: boolean = false;
+  downloaded: boolean = false;
 
   constructor(
     private afs: AngularFirestore,
@@ -252,15 +251,13 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       epochs: +this.epochSel,
       callbacks: {
         onBatchEnd: async (batch, logs) => {
-          this.trainStatus("Loss: " + logs.loss.toFixed(5));
+          this.trainStatus = "Loss: " + logs.loss.toFixed(5);
+          this.doneTraining = true;
         }
       }
     });
   }
 
-  trainStatus(status: string) {
-    this.trainStatusEl.nativeElement.innerText = status;
-  }
   async predict() {
     this.predictingVisible = true;
     console.log("predicting");
@@ -276,6 +273,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       predictedClass.dispose();
       console.log("moving ", this.CONTROLS[classId]);
 
+      this.currentMove = this.CONTROLS[classId];
+
       document.body.setAttribute("data-active", this.CONTROLS[classId]);
       await tf.nextFrame();
     }
@@ -283,7 +282,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   async trainBtn() {
-    this.trainStatus("Training...");
+    this.trainStatus = "Training...";
     await tf.nextFrame();
     await tf.nextFrame();
     this.isPredicting = false;
@@ -291,13 +290,13 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   predictBtn() {
-    this.isPredicting = true;
+    this.currentMove = null;
+    this.isPredicting = !this.isPredicting;
     this.predict();
   }
 
   async handler(label) {
     this.addExampleHandler(label);
-    this.examples[this.CONTROLS[label]]++;
     await tf.nextFrame();
     document.body.removeAttribute("data-active");
   }
@@ -305,17 +304,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   saveModel() {
     this.model.save("downloads://my-model-1").then(res => {
       console.log(res);
+      this.downloaded = true;
     });
-
-    this.afAuth.auth.currentUser
-      .getIdToken(true)
-      .then(idToken => {
-        console.log(idToken);
-      })
-      .catch(error => {
-        // Handle error
-        console.error("no token", error);
-      });
   }
 
   loadModel() {

@@ -6,6 +6,7 @@ import { PersonalComponent } from "./personal/personal.component";
 
 const routes: Routes = [
   { path: "*", redirectTo: "home" },
+  { path: "", redirectTo: "home", pathMatch: "full" },
   {
     path: "home",
     component: HomeComponent
