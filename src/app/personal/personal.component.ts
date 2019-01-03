@@ -29,6 +29,9 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   @ViewChild("third") third: ElementRef;
   captImgEl: any;
   loading: boolean = true;
+  errormsg: Array<string> = ["3 tries left", "3 tries left", "3 tries left"];
+  tries: Array<number> = [0, 0, 0];
+  found: Array<boolean> = [false, false, false];
 
   SIGNS: Array<ElementRef>;
   webcam: Webcam;
@@ -92,7 +95,18 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   }
 
   predictBtn(id: number) {
-    this.predict(id);
+    this.tries[id]++;
+    console.log(this.tries);
+    if (!this.found[id]) {
+      if (this.tries[id] < 3) {
+        this.predict(id);
+        this.errormsg[id] = 3 - this.tries[id] + " tries left!";
+      } else {
+        this.errormsg[id] = "Sorry, no more tries!";
+      }
+    } else {
+      this.errormsg[id] = "Already found this!";
+    }
   }
 
   async predict(id: number) {
@@ -109,7 +123,11 @@ export class PersonalComponent implements AfterViewInit, OnInit {
 
     const classId = (await predictedClass.data())[0];
     predictedClass.dispose();
-    console.log("captured ", this.CONTROLS[classId]);
+    console.log("captured ", this.CONTROLS[classId], classId);
+    if (classId === id) {
+      this.errormsg[id] = "Correct!";
+      this.found[id] = true;
+    }
     await tf.nextFrame();
   }
 

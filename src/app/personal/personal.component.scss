@@ -1,12 +1,19 @@
-.thumb-box {
-  background-color: black;
-  border: 1px black solid;
-  height: 224px;
-  width: 224px;
+.three-signs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
-  canvas {
-    width: 224px;
-    height: 224px;
+  .thumb-box {
+    background-color: black;
+    border: 1px black solid;
+    height: 140px;
+    width: 140px;
+
+    canvas {
+      width: 140px;
+      height: 140px;
+    }
   }
 }
 
