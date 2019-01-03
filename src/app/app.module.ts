@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule, MatInputModule } from "@angular/material";
 import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CreateComponent } from "./create/create.component";
@@ -27,6 +28,7 @@ import { PersonalComponent } from "./personal/personal.component";
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

@@ -172,29 +172,32 @@
     your profile, so that you can use it to centeryour personal space the next
     time you sign in.
   </p>
-  <p>First, upload the file called 'sign-model.json' here:</p>
   <div class="file-uploads">
     <div>
-      <input type="file" #moodFile />
-      <button mat-icon-button color="primary">
+      <label for="json-file">First, upload the file called 'sign-model.json' here: &nbsp;</label>
+      <input type="file" id="json-file" name="json-file" #moodFile />
+      <button mat-icon-button color="primary" [disabled]="uploadingjson">
         <mat-icon
           aria-label="Upload the model file"
           (click)="uploadFile('json')"
           >cloud_upload</mat-icon
         >
       </button>
+      <mat-spinner *ngIf="uploadingjson" [diameter]="20" style="display: unset;"></mat-spinner>
       <mat-icon *ngIf="uploadedjson" aria-label="Upload of the model file ok"
         >check</mat-icon>
     </div>
     <div>
-      <input type="file" #weightsFile />
-      <button mat-icon-button color="primary">
+      <label for="json-file">Then, upload the file called 'sign-model.weights.bin' here: &nbsp;</label>
+      <input type="file" id="weights-file" name="weights-file" #weightsFile />
+      <button mat-icon-button color="primary" [disabled]="uploadingweights">
         <mat-icon
           aria-label="Upload the weights file"
           (click)="uploadFile('weights')"
           >cloud_upload</mat-icon
         >
       </button>
+      <mat-spinner [diameter]="20" *ngIf="uploadingweights" style="display: unset;"></mat-spinner>
       <mat-icon *ngIf="uploadedweights" aria-label="Upload of the weights file ok"
         >check</mat-icon>
     </div>

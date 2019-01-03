@@ -92,7 +92,9 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   doneTraining: boolean = false;
   downloaded: boolean = false;
   uploadedjson: boolean = false;
+  uploadingjson: boolean = false;
   uploadedweights: boolean = false;
+  uploadingweights: boolean = false;
 
   constructor(
     private afs: AngularFirestore,
@@ -109,9 +111,11 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     let file;
     if (name === "json") {
       this.uploadedjson = false;
+      this.uploadingjson = true;
       file = this.moodFile.nativeElement.files[0];
     } else {
       this.uploadedweights = false;
+      this.uploadingweights = true;
       file = this.weightsFileEl.nativeElement.files[0];
     }
     const filePath = "model_" + name;
@@ -122,8 +126,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         console.log(res);
         if (name === "json") {
           this.uploadedjson = true;
+          this.uploadingjson = false;
         } else {
           this.uploadedweights = true;
+          this.uploadingweights = false;
         }
       })
       .catch(err => {
