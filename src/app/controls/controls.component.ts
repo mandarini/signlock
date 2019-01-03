@@ -104,6 +104,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.itemsCollection = afs.collection<any>("items");
     this.items = this.itemsCollection.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
+    console.log(this.afAuth.auth.currentUser.uid);
   }
 
   uploadFile(name) {
@@ -119,7 +120,9 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       file = this.weightsFileEl.nativeElement.files[0];
     }
     const filePath = "model_" + name;
-    const ref = this.storage.ref(filePath);
+    const ref = this.storage.ref(
+      `${this.afAuth.auth.currentUser.uid}/${filePath}`
+    );
     const task = ref.put(file);
     task
       .then(res => {
@@ -327,65 +330,65 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     });
   }
 
-  loadModel() {
-    tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(
-      res => {
-        this.model = res;
-      }
-    );
-  }
-
-  loadJson() {
-    const ref = this.storage.ref("trainedjson");
-    this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
-      ref.getDownloadURL().subscribe(item => {
-        console.log(item);
-        fetch(item, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${idToken}`
-          }
-        })
-          .then(response => {
-            console.log(response);
-            return response.blob();
-          })
-          .then(blob => {
-            this.jsonFile = new File([blob], "jsonFile");
-            console.log(this.fileName1);
-            this.donejson = true;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      });
-    });
-  }
-
-  loadWeights() {
-    const ref = this.storage.ref("trainedweights");
-    this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
-      ref.getDownloadURL().subscribe(item => {
-        console.log(item);
-        fetch(item, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${idToken}`
-          }
-        })
-          .then(response => {
-            console.log(response);
-            return response.blob();
-          })
-          .then(blob => {
-            this.weightsFile = new File([blob], "sign-model.weights.bin");
-            console.log(this.weightsFile);
-            this.doneweights = true;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      });
-    });
-  }
+  // loadModel() {
+  //   tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(
+  //     res => {
+  //       this.model = res;
+  //     }
+  //   );
+  // }
+  //
+  // loadJson() {
+  //   const ref = this.storage.ref("model_json");
+  //   this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
+  //     ref.getDownloadURL().subscribe(item => {
+  //       console.log(item);
+  //       fetch(item, {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${idToken}`
+  //         }
+  //       })
+  //         .then(response => {
+  //           console.log(response);
+  //           return response.blob();
+  //         })
+  //         .then(blob => {
+  //           this.jsonFile = new File([blob], "sign-model.json");
+  //           console.log(this.fileName1);
+  //           this.donejson = true;
+  //         })
+  //         .catch(err => {
+  //           console.error(err);
+  //         });
+  //     });
+  //   });
+  // }
+  //
+  // loadWeights() {
+  //   const ref = this.storage.ref("model_weights");
+  //   this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
+  //     ref.getDownloadURL().subscribe(item => {
+  //       console.log(item);
+  //       fetch(item, {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Bearer ${idToken}`
+  //         }
+  //       })
+  //         .then(response => {
+  //           console.log(response);
+  //           return response.blob();
+  //         })
+  //         .then(blob => {
+  //           this.weightsFile = new File([blob], "sign-model.weights.bin");
+  //           console.log(this.weightsFile);
+  //           this.doneweights = true;
+  //         })
+  //         .catch(err => {
+  //           console.error(err);
+  //         });
+  //     });
+  //   });
+  // }
 }

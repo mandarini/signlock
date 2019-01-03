@@ -11,59 +11,45 @@
     ></video>
   </div>
 </div>
-<div class="thumb-box">
-  <canvas
-    class="camera"
-    width="224"
-    height="224"
-    #first
-    (click)="predictBtn(0)"
-  ></canvas>
+<div>
+  <div class="thumb-box">
+    <canvas
+      class="camera"
+      width="224"
+      height="224"
+      #first
+      (click)="predictBtn(0)"
+    ></canvas>
+  </div>
+  <div class="thumb-box">
+    <canvas
+      class="camera"
+      width="224"
+      height="224"
+      #second
+      (click)="predictBtn(1)"
+    ></canvas>
+  </div>
+  <div class="thumb-box">
+    <canvas
+      class="camera"
+      width="224"
+      height="224"
+      #third
+      (click)="predictBtn(2)"
+    ></canvas>
+  </div>
 </div>
-<div class="thumb-box">
-  <canvas
-    class="camera"
-    width="224"
-    height="224"
-    #second
-    (click)="predictBtn(1)"
-  ></canvas>
-</div>
-<div class="thumb-box">
-  <canvas
-    class="camera"
-    width="224"
-    height="224"
-    #third
-    (click)="predictBtn(2)"
-  ></canvas>
-</div>
+
 <p *ngIf="loading">Still loading</p>
 <div *ngIf="!loading">
-  <p>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadJson()"
-      [disabled]="false"
-    >
-      load json
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadWeights()"
-      [disabled]="!donejson"
-    >
-      load weights
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadModel()"
-      [disabled]="!doneweights"
-    >
-      load saved model
-    </button>
-  </p>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="loadJson()"
+    [disabled]="nowLoading"
+  >
+    LOAD MODEL
+  </button>
+  <mat-spinner [diameter]="20" *ngIf="nowLoading" style="display: unset;"></mat-spinner>
 </div>

@@ -43,8 +43,7 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   jsonFile: File;
   weightsFile: File;
 
-  donejson: boolean = false;
-  doneweights: boolean = false;
+  nowLoading: boolean = false;
   haswebcam: boolean = true;
 
   truncatedMobileNet: any;
@@ -132,12 +131,16 @@ export class PersonalComponent implements AfterViewInit, OnInit {
     tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(
       res => {
         this.model = res;
+        this.nowLoading = false;
       }
     );
   }
 
   loadJson() {
-    const ref = this.storage.ref("trainedjson");
+    this.nowLoading = true;
+    const ref = this.storage.ref(
+      `${this.afAuth.auth.currentUser.uid}/model_json`
+    );
     this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
       ref.getDownloadURL().subscribe(item => {
         console.log(item);
@@ -152,9 +155,8 @@ export class PersonalComponent implements AfterViewInit, OnInit {
             return response.blob();
           })
           .then(blob => {
-            this.jsonFile = new File([blob], "jsonFile");
-            console.log(this.fileName1);
-            this.donejson = true;
+            this.jsonFile = new File([blob], "sign-model.json");
+            this.loadWeights();
           })
           .catch(err => {
             console.error(err);
@@ -164,7 +166,9 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   }
 
   loadWeights() {
-    const ref = this.storage.ref("trainedweights");
+    const ref = this.storage.ref(
+      `${this.afAuth.auth.currentUser.uid}/model_weights`
+    );
     this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
       ref.getDownloadURL().subscribe(item => {
         console.log(item);
@@ -179,9 +183,8 @@ export class PersonalComponent implements AfterViewInit, OnInit {
             return response.blob();
           })
           .then(blob => {
-            this.weightsFile = new File([blob], "my-model-1.weights.bin");
-            console.log(this.weightsFile);
-            this.doneweights = true;
+            this.weightsFile = new File([blob], "sign-model.weights.bin");
+            this.loadModel();
           })
           .catch(err => {
             console.error(err);
