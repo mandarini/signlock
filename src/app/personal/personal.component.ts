@@ -49,6 +49,8 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   nowLoading: boolean = false;
   haswebcam: boolean = true;
 
+  showSpace: boolean = false;
+
   truncatedMobileNet: any;
 
   constructor(
@@ -66,7 +68,7 @@ export class PersonalComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.SIGNS = [this.first, this.second, this.third];
-    console.log("hey", this.webcamEl);
+    console.log("hey", this.webcamEl, this.SIGNS);
     this.webcam = new Webcam(this.webcamEl.nativeElement);
     this.webcam
       .setup()
@@ -76,7 +78,13 @@ export class PersonalComponent implements AfterViewInit, OnInit {
       .catch(() => {
         this.haswebcam = false;
       });
-    // const img = this.webcam.capture();
+  }
+
+  leaveSpace() {
+    this.showSpace = false;
+    this.errormsg = ["3 tries left", "3 tries left", "3 tries left"];
+    this.tries = [0, 0, 0];
+    this.found = [false, false, false];
   }
 
   draw(image, id) {
@@ -134,7 +142,7 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   async init() {
     this.truncatedMobileNet = await this.loadTruncatedMobileNet();
     tf.tidy(() => this.truncatedMobileNet.predict(this.webcam.capture()));
-    this.loading = false;
+    this.loadJson();
   }
 
   async loadTruncatedMobileNet() {
@@ -150,6 +158,7 @@ export class PersonalComponent implements AfterViewInit, OnInit {
       res => {
         this.model = res;
         this.nowLoading = false;
+        this.loading = false;
       }
     );
   }

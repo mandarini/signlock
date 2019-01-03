@@ -15,6 +15,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireStorageModule } from "@angular/fire/storage";
 import { environment } from "../environments/environment";
 import { PersonalComponent } from "./personal/personal.component";
+import { SecretsComponent } from './secrets/secrets.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PersonalComponent } from "./personal/personal.component";
     CreateComponent,
     ControlsComponent,
     HomeComponent,
-    PersonalComponent
+    PersonalComponent,
+    SecretsComponent
   ],
   imports: [
     MatButtonModule,

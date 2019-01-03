@@ -1,70 +1,76 @@
-<p *ngIf="loading">Still loading</p>
+<div *ngIf="loading" class="loading-cover">
+  Loading...
+  <mat-spinner></mat-spinner>
+</div>
 <div *ngIf="!showSpace">
   <div *ngIf="!loading">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loadJson()"
-      [disabled]="nowLoading"
-    >
-      LOAD MODEL
-    </button>
-    <mat-spinner
-      [diameter]="20"
-      *ngIf="nowLoading"
-      style="display: unset;"
-    ></mat-spinner>
+    <p>Welcome to your personal space.</p>
+    <p>
+      To enter, give the secret signs, in the correct order. If everything is
+      right, you will be able to enter!
+    </p>
   </div>
-  <div class="webcam-box-outer">
-    <div class="webcam-box-inner">
-      <video
-        autoplay
-        playsinline
-        muted
-        class="camera"
-        #webcam
-        width="224"
-        height="224"
-      ></video>
+  <div class="all-cameras">
+    <div class="webcam-box-outer">
+      <div class="webcam-box-inner">
+        <video
+          autoplay
+          playsinline
+          muted
+          class="camera"
+          #webcam
+          width="224"
+          height="224"
+        ></video>
+      </div>
     </div>
-  </div>
-  <div class="three-signs">
-    <div class="thumb-box">
-      <canvas
-        class="camera"
-        width="224"
-        height="224"
-        #first
-        (click)="predictBtn(0)"
-      ></canvas>
-      <p>{{ errormsg[0] }}</p>
-    </div>
-    <div class="thumb-box">
-      <canvas
-        class="camera"
-        width="224"
-        height="224"
-        #second
-        (click)="predictBtn(1)"
-      ></canvas>
-      <p>{{ errormsg[1] }}</p>
-    </div>
-    <div class="thumb-box">
-      <canvas
-        class="camera"
-        width="224"
-        height="224"
-        #third
-        (click)="predictBtn(2)"
-      ></canvas>
-      <p>{{ errormsg[2] }}</p>
+    <div class="three-signs">
+      <div class="thumb-box">
+        <canvas
+          class="camera"
+          width="224"
+          height="224"
+          #first
+          (click)="predictBtn(0)"
+        ></canvas>
+        <p>{{ errormsg[0] }}</p>
+      </div>
+      <div class="thumb-box">
+        <canvas
+          class="camera"
+          width="224"
+          height="224"
+          #second
+          (click)="predictBtn(1)"
+        ></canvas>
+        <p>{{ errormsg[1] }}</p>
+      </div>
+      <div class="thumb-box">
+        <canvas
+          class="camera"
+          width="224"
+          height="224"
+          #third
+          (click)="predictBtn(2)"
+        ></canvas>
+        <p>{{ errormsg[2] }}</p>
+      </div>
     </div>
   </div>
 </div>
 
-<div *ngIf="found[0] && found[1] && found[2]">
-  You passed! Now you can see your personal space!
-  <button mat-raised-button color="primary" (click)="showSpace = !showSpace">
-    <span *ngIf="!showSpace">LET'S GO</span><span *ngIf="showSpace">LEAVE</span>
-  </button>
+<!-- <div *ngIf="found[0] && found[1] && found[2]"> -->
+<div class="secret-space">
+  <div *ngIf="!showSpace">
+    <p>You passed! Now you can see your personal space!</p>
+    <button mat-raised-button color="primary" (click)="showSpace = !showSpace">
+      LET'S GO
+    </button>
+  </div>
+  <div *ngIf="showSpace">
+    This is it!
+    <button mat-raised-button color="primary" (click)="leaveSpace()">
+      LEAVE
+    </button>
+  </div>
 </div>
