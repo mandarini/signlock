@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule, MatInputModule } from "@angular/material";
+import { MatIconModule } from "@angular/material/icon";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CreateComponent } from "./create/create.component";
@@ -25,6 +26,7 @@ import { PersonalComponent } from "./personal/personal.component";
   imports: [
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

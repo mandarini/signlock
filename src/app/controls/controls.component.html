@@ -141,14 +141,24 @@
   </div>
   <div class="big-buttons">
     <button mat-raised-button color="primary" (click)="trainBtn()">
-      <span id="train-status">{{trainStatus}}</span>
+      <span id="train-status">{{ trainStatus }}</span>
     </button>
-    <button mat-raised-button color="primary" (click)="predictBtn()" [disabled]="!doneTraining">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="predictBtn()"
+      [disabled]="!doneTraining"
+    >
       <span *ngIf="!isPredicting">CHECK</span
       ><span *ngIf="isPredicting">STOP</span>
     </button>
 
-    <button mat-raised-button color="primary" (click)="saveModel()" [disabled]="!doneTraining">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="saveModel()"
+      [disabled]="!doneTraining"
+    >
       DOWNLOAD MODEL
     </button>
   </div>
@@ -158,23 +168,35 @@
 </div>
 <div class="all-buttons">
   <p>
-
+    Now that your model is saved and downloaded properly, you can save it in
+    your profile, so that you can use it to centeryour personal space the next
+    time you sign in.
   </p>
-
-  <p>
-    <input
-      matInput
-      type="text"
-      [(ngModel)]="fileName1"
-      placeholder="Insert Mood name for File1"
-    />
-    <input type="file" #moodFile (change)="uploadFile($event, fileName1)" />
-    <input
-      matInput
-      type="text"
-      [(ngModel)]="fileName2"
-      placeholder="Insert Mood name for File2"
-    />
-    <input type="file" (change)="uploadFile($event, fileName2)" />
-  </p>
+  <p>First, upload the file called 'sign-model.json' here:</p>
+  <div class="file-uploads">
+    <div>
+      <input type="file" #moodFile />
+      <button mat-icon-button color="primary">
+        <mat-icon
+          aria-label="Upload the model file"
+          (click)="uploadFile('json')"
+          >cloud_upload</mat-icon
+        >
+      </button>
+      <mat-icon *ngIf="uploadedjson" aria-label="Upload of the model file ok"
+        >check</mat-icon>
+    </div>
+    <div>
+      <input type="file" #weightsFile />
+      <button mat-icon-button color="primary">
+        <mat-icon
+          aria-label="Upload the weights file"
+          (click)="uploadFile('weights')"
+          >cloud_upload</mat-icon
+        >
+      </button>
+      <mat-icon *ngIf="uploadedweights" aria-label="Upload of the weights file ok"
+        >check</mat-icon>
+    </div>
+  </div>
 </div>

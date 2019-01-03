@@ -73,6 +73,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("firstThumb") firstThumb: ElementRef;
   @ViewChild("secondThumb") secondThumb: ElementRef;
   @ViewChild("moodFile") moodFile: ElementRef;
+  @ViewChild("weightsFile") weightsFileEl: ElementRef;
 
   BUTTONS: Array<ElementRef>;
   private itemsCollection: AngularFirestoreCollection<any>;
@@ -90,6 +91,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   trainStatus: string = "TRAIN MODEL";
   doneTraining: boolean = false;
   downloaded: boolean = false;
+  uploadedjson: boolean = false;
+  uploadedweights: boolean = false;
 
   constructor(
     private afs: AngularFirestore,
@@ -101,17 +104,27 @@ export class ControlsComponent implements AfterViewInit, OnInit {
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
   }
 
-  uploadFile(event, name) {
-    console.log(event, "file", event.target.files[0]);
+  uploadFile(name) {
     console.log("uploading", name);
-    const file = event.target.files[0];
-    const filePath = name;
+    let file;
+    if (name === "json") {
+      this.uploadedjson = false;
+      file = this.moodFile.nativeElement.files[0];
+    } else {
+      this.uploadedweights = false;
+      file = this.weightsFileEl.nativeElement.files[0];
+    }
+    const filePath = "model_" + name;
     const ref = this.storage.ref(filePath);
     const task = ref.put(file);
-    console.log(task);
     task
       .then(res => {
         console.log(res);
+        if (name === "json") {
+          this.uploadedjson = true;
+        } else {
+          this.uploadedweights = true;
+        }
       })
       .catch(err => {
         console.error(err);
@@ -302,7 +315,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   }
 
   saveModel() {
-    this.model.save("downloads://my-model-1").then(res => {
+    this.model.save("downloads://sign-model").then(res => {
       console.log(res);
       this.downloaded = true;
     });
@@ -359,7 +372,7 @@ export class ControlsComponent implements AfterViewInit, OnInit {
             return response.blob();
           })
           .then(blob => {
-            this.weightsFile = new File([blob], "my-model-1.weights.bin");
+            this.weightsFile = new File([blob], "sign-model.weights.bin");
             console.log(this.weightsFile);
             this.doneweights = true;
           })
