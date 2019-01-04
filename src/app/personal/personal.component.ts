@@ -10,6 +10,11 @@ import { Webcam } from "../webcam";
 import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireStorage } from "@angular/fire/storage";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from "@angular/fire/firestore";
 
 @Component({
   selector: "app-personal",
@@ -46,13 +51,25 @@ export class PersonalComponent implements AfterViewInit, OnInit {
 
   truncatedMobileNet: any;
 
+  private loggedUser: AngularFirestoreDocument<any>;
+  loggedUserData: Observable<any>;
+
   constructor(
+    private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     private storage: AngularFireStorage
-  ) {}
+  ) {
+    this.loggedUser = afs
+      .collection("users")
+      .doc(this.afAuth.auth.currentUser.uid)
+      .collection("authStatus")
+      .doc("loggedIn");
+    this.loggedUserData = this.loggedUser.valueChanges();
+  }
 
   ngOnInit() {
     this.init();
+    this.loggedUser.set({ status: false });
   }
 
   ngAfterViewInit() {
@@ -124,6 +141,11 @@ export class PersonalComponent implements AfterViewInit, OnInit {
     if (classId === id) {
       this.errormsg[id] = "Correct!";
       this.found[id] = true;
+    }
+
+    if (this.found[0] && this.found[1] && this.found[2]) {
+      console.log("found everything");
+      this.loggedUser.set({ status: true });
     }
     await tf.nextFrame();
   }
