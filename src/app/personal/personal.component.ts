@@ -54,13 +54,9 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   truncatedMobileNet: any;
 
   constructor(
-    private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     private storage: AngularFireStorage
-  ) {
-    this.itemsCollection = afs.collection<any>("items");
-    this.items = this.itemsCollection.valueChanges();
-  }
+  ) {}
 
   ngOnInit() {
     this.init();

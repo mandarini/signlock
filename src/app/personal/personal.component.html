@@ -68,9 +68,10 @@
     </button>
   </div>
   <div *ngIf="showSpace">
-    This is it!
-    <button mat-raised-button color="primary" (click)="leaveSpace()">
+    <h2>Welcome to your Room of Secrets!</h2>
+    <button class="leave-btn" mat-raised-button color="primary" (click)="leaveSpace()">
       LEAVE
     </button>
+    <app-secrets></app-secrets>
   </div>
 </div>

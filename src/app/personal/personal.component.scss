@@ -22,6 +22,12 @@
 
 .secret-space {
   text-align: center;
+  position: relative;
+  .leave-btn {
+    position: absolute;
+    top: 36px;
+    right: 36px;
+  }
 }
 
 .three-signs {
