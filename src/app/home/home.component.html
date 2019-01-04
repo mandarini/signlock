@@ -5,13 +5,13 @@
 </p>
 <h1>Hello {{ user.displayName }}!</h1>
 <button (click)="logout()" mat-raised-button color="primary">LOG OUT</button>
-<div *ngIf="getStatus() | async">
+<div *ngIf="statusJ && statusW">
   <p>
-    <button routerLink="/personal">Log in</button> to your secret space
+    <button routerLink="/personal" mat-raised-button color="primary">ENTER</button> your secret space
   </p>
 </div>
-<div *ngIf="!getStatus() | async">
+<div *ngIf="!statusJ || !statusW">
   <p>
-    <button routerLink="/create" mat-raised-button color="primary">Create a new sign step authentication</button>
+    <button routerLink="/create" mat-raised-button color="primary">CREATE A NEW SECRET SIGN SEQUENCE</button>
   </p>
 </div>

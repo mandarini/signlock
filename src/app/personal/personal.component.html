@@ -59,6 +59,12 @@
   </div>
 </div>
 
+<div *ngIf="tries[0]===3 && tries[1]===3 && tries[2]===3" class="secret-space">
+  It seems you have forgotten your special combination.
+  Please create a new one!
+  <button routerLink="/create" mat-raised-button color="primary">CREATE A NEW SECRET SIGN SEQUENCE</button>
+</div>
+
 <div *ngIf="found[0] && found[1] && found[2]" class="secret-space">
   <div *ngIf="!showSpace">
     <p>You passed! Now you can see your personal space!</p>

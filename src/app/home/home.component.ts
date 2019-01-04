@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit {
   modelJsonData: Observable<any>;
   private modelWeightsDoc: AngularFirestoreDocument<any>;
   modelWeightsData: Observable<any>;
+  statusJ: boolean;
+  statusW: boolean;
 
   constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
     this.user = this.afAuth.auth.currentUser;
@@ -36,10 +38,15 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.modelJsonData.subscribe(res => {});
+    this.modelJsonData.subscribe(res => {
+      this.statusJ = res.status;
+    });
+    this.modelWeightsData.subscribe(res => {
+      this.statusW = res.status;
+    });
   }
 
-  getStatus(): Observable<any> {
-    return this.modelJsonData;
+  logout() {
+    this.afAuth.auth.signOut();
   }
 }

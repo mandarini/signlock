@@ -7,10 +7,6 @@ import {
 } from "@angular/core";
 import * as tf from "@tensorflow/tfjs";
 import { Webcam } from "../webcam";
-import {
-  AngularFirestore,
-  AngularFirestoreCollection
-} from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireStorage } from "@angular/fire/storage";
@@ -36,9 +32,6 @@ export class PersonalComponent implements AfterViewInit, OnInit {
   SIGNS: Array<ElementRef>;
   webcam: Webcam;
   model: any;
-
-  private itemsCollection: AngularFirestoreCollection<any>;
-  items: Observable<any[]>;
 
   fileName1: string;
   fileName2: string;

@@ -99,6 +99,8 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   modelJsonData: Observable<any>;
   private modelWeightsDoc: AngularFirestoreDocument<any>;
   modelWeightsData: Observable<any>;
+  private secretsCollection: AngularFirestoreCollection<any>;
+  secrets: Observable<any[]>;
 
   constructor(
     private afs: AngularFirestore,
