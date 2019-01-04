@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
+  AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { AngularFireAuth } from "@angular/fire/auth";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-secrets",
@@ -11,26 +13,26 @@ import { AngularFireAuth } from "@angular/fire/auth";
   styleUrls: ["./secrets.component.scss"]
 })
 export class SecretsComponent implements OnInit {
-  private itemsCollection: AngularFirestoreCollection<Item>;
-  items: Observable<Item[]>;
+  private secretsCollection: AngularFirestoreCollection<any>;
+  secrets: Observable<any[]>;
 
   constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
-    this.itemsCollection = afs
+    this.secretsCollection = afs
       .collection("users")
       .doc(this.afAuth.auth.currentUser.uid)
       .collection("secrets");
-    this.items = this.itemsCollection.valueChanges();
+    this.secrets = this.secretsCollection.valueChanges();
   }
 
   addItem(secret: string) {
     let item = {
       secret: secret
     };
-    this.itemsCollection.add(item);
+    this.secretsCollection.add(item);
   }
 
   ngOnInit() {
-    this.items.subscribe(res => {
+    this.secrets.subscribe(res => {
       console.log(res);
     });
   }

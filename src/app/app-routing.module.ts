@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { CreateComponent } from "./create/create.component";
 import { HomeComponent } from "./home/home.component";
 import { PersonalComponent } from "./personal/personal.component";
+import { HelpComponent } from "./help/help.component";
 
 const routes: Routes = [
   { path: "*", redirectTo: "home" },
@@ -21,6 +22,10 @@ const routes: Routes = [
     path: "personal",
     component: PersonalComponent
     // canActivate: [AppAuthGuard]
+  },
+  {
+    path: "help",
+    component: HelpComponent
   }
 ];
 

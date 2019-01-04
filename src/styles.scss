@@ -42,6 +42,9 @@ header {
   position: relative;
   text-align: center;
   -webkit-font-smoothing: antialiased;
+  span {
+    cursor: pointer;
+  }
 }
 header b {
   color: rgba(255, 255, 255, 1);

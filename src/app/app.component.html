@@ -1,5 +1,5 @@
 <header>
-  SignLock: Unlock your personal space with your secret gestures.
+  <span routerLink="/home"><strong>SignLock:</strong>Unlock your personal space with your secret gestures.</span>
 </header>
 <div *ngIf="(afAuth.user | async) as user; else showLogin">
   <router-outlet></router-outlet>
@@ -7,5 +7,5 @@
 
 <ng-template #showLogin>
   <p>Please login.</p>
-  <button (click)="login()">Login with Google</button>
+  <button (click)="login()" mat-raised-button color="primary">Login with Google</button>
 </ng-template>

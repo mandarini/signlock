@@ -4,15 +4,14 @@
   secret hand signs!
 </p>
 <h1>Hello {{ user.displayName }}!</h1>
-<button (click)="logout()">Logout</button>
-<div *ngIf="signstep">
+<button (click)="logout()" mat-raised-button color="primary">LOG OUT</button>
+<div *ngIf="getStatus() | async">
   <p>
-    <button (click)="loginScreen = !loginScreen">Log in</button> to your account
+    <button routerLink="/personal">Log in</button> to your secret space
   </p>
-  <div *ngIf="loginScreen"><p>log in here</p></div>
 </div>
-<div *ngIf="!signstep">
+<div *ngIf="!getStatus() | async">
   <p>
-    <button routerLink="/create">Create a new sign step authentication</button>
+    <button routerLink="/create" mat-raised-button color="primary">Create a new sign step authentication</button>
   </p>
 </div>

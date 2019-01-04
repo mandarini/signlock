@@ -59,8 +59,7 @@
   </div>
 </div>
 
-<!-- <div *ngIf="found[0] && found[1] && found[2]"> -->
-<div class="secret-space">
+<div *ngIf="found[0] && found[1] && found[2]" class="secret-space">
   <div *ngIf="!showSpace">
     <p>You passed! Now you can see your personal space!</p>
     <button mat-raised-button color="primary" (click)="showSpace = !showSpace">

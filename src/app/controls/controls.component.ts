@@ -10,7 +10,8 @@ import { Webcam } from "../webcam";
 import { ControllerDataset } from "../controller-dataset";
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { AngularFireAuth } from "@angular/fire/auth";
@@ -76,8 +77,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   @ViewChild("weightsFile") weightsFileEl: ElementRef;
 
   BUTTONS: Array<ElementRef>;
-  private itemsCollection: AngularFirestoreCollection<any>;
-  items: Observable<any[]>;
 
   fileName1: string;
   fileName2: string;
@@ -96,13 +95,28 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   uploadedweights: boolean = false;
   uploadingweights: boolean = false;
 
+  private modelJsonDoc: AngularFirestoreDocument<any>;
+  modelJsonData: Observable<any>;
+  private modelWeightsDoc: AngularFirestoreDocument<any>;
+  modelWeightsData: Observable<any>;
+
   constructor(
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     private storage: AngularFireStorage
   ) {
-    this.itemsCollection = afs.collection<any>("items");
-    this.items = this.itemsCollection.valueChanges();
+    this.modelJsonDoc = afs
+      .collection("users")
+      .doc(this.afAuth.auth.currentUser.uid)
+      .collection("model")
+      .doc("json");
+    this.modelJsonData = this.modelJsonDoc.valueChanges();
+    this.modelWeightsDoc = afs
+      .collection("users")
+      .doc(this.afAuth.auth.currentUser.uid)
+      .collection("model")
+      .doc("weights");
+    this.modelWeightsData = this.modelWeightsDoc.valueChanges();
     this.controllerDataset = new ControllerDataset(this.NUM_CLASSES);
     console.log(this.afAuth.auth.currentUser.uid);
   }
@@ -114,10 +128,12 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       this.uploadedjson = false;
       this.uploadingjson = true;
       file = this.moodFile.nativeElement.files[0];
+      this.modelJsonDoc.set({ status: false });
     } else {
       this.uploadedweights = false;
       this.uploadingweights = true;
       file = this.weightsFileEl.nativeElement.files[0];
+      this.modelWeightsDoc.set({ status: false });
     }
     const filePath = "model_" + name;
     const ref = this.storage.ref(
@@ -130,13 +146,20 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         if (name === "json") {
           this.uploadedjson = true;
           this.uploadingjson = false;
+          this.modelJsonDoc.set({ status: true });
         } else {
           this.uploadedweights = true;
           this.uploadingweights = false;
+          this.modelWeightsDoc.set({ status: true });
         }
       })
       .catch(err => {
         console.error(err);
+        if (name === "json") {
+          this.modelJsonDoc.set({ status: false });
+        } else {
+          this.modelWeightsDoc.set({ status: false });
+        }
       });
   }
 
@@ -329,66 +352,4 @@ export class ControlsComponent implements AfterViewInit, OnInit {
       this.downloaded = true;
     });
   }
-
-  // loadModel() {
-  //   tf.loadModel(tf.io.browserFiles([this.jsonFile, this.weightsFile])).then(
-  //     res => {
-  //       this.model = res;
-  //     }
-  //   );
-  // }
-  //
-  // loadJson() {
-  //   const ref = this.storage.ref("model_json");
-  //   this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
-  //     ref.getDownloadURL().subscribe(item => {
-  //       console.log(item);
-  //       fetch(item, {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${idToken}`
-  //         }
-  //       })
-  //         .then(response => {
-  //           console.log(response);
-  //           return response.blob();
-  //         })
-  //         .then(blob => {
-  //           this.jsonFile = new File([blob], "sign-model.json");
-  //           console.log(this.fileName1);
-  //           this.donejson = true;
-  //         })
-  //         .catch(err => {
-  //           console.error(err);
-  //         });
-  //     });
-  //   });
-  // }
-  //
-  // loadWeights() {
-  //   const ref = this.storage.ref("model_weights");
-  //   this.afAuth.auth.currentUser.getIdToken(true).then(idToken => {
-  //     ref.getDownloadURL().subscribe(item => {
-  //       console.log(item);
-  //       fetch(item, {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${idToken}`
-  //         }
-  //       })
-  //         .then(response => {
-  //           console.log(response);
-  //           return response.blob();
-  //         })
-  //         .then(blob => {
-  //           this.weightsFile = new File([blob], "sign-model.weights.bin");
-  //           console.log(this.weightsFile);
-  //           this.doneweights = true;
-  //         })
-  //         .catch(err => {
-  //           console.error(err);
-  //         });
-  //     });
-  //   });
-  // }
 }
