@@ -102,6 +102,10 @@ export class ControlsComponent implements AfterViewInit, OnInit {
   private secretsCollection: AngularFirestoreCollection<any>;
   secrets: Observable<any[]>;
 
+  public focusable: NodeListOf<HTMLElement>;
+  counter: number = 0;
+  clickIt: HTMLElement;
+
   constructor(
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth,
@@ -167,6 +171,31 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.init();
+    document.addEventListener("keydown", this.logKey);
+  }
+
+  logKey(e) {
+    this.focusable = document.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    console.log(this.focusable);
+    let foc = this.focusable;
+    console.log(e.code);
+    if (e.code === "KeyK") {
+      console.log(foc.item(this.counter));
+      foc.item(this.counter).focus();
+      if (this.counter < foc.length) {
+        this.counter++;
+      } else {
+        this.counter = 0;
+      }
+    }
+
+    if (e.code === "KeyL") {
+      console.log(document.activeElement);
+      this.clickIt = document.activeElement;
+      this.clickIt.click();
+    }
   }
 
   ngAfterViewInit() {
