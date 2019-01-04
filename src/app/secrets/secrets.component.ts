@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import {
   AngularFirestore,
   AngularFirestoreDocument,
@@ -15,6 +15,7 @@ import { Observable } from "rxjs";
 export class SecretsComponent implements OnInit {
   private secretsCollection: AngularFirestoreCollection<any>;
   secrets: Observable<any[]>;
+  @Input() newSecret: string;
 
   constructor(private afs: AngularFirestore, public afAuth: AngularFireAuth) {
     this.secretsCollection = afs
