@@ -171,31 +171,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.init();
-    document.addEventListener("keydown", this.logKey);
-  }
-
-  logKey(e) {
-    this.focusable = document.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    console.log(this.focusable);
-    let foc = this.focusable;
-    console.log(e.code);
-    if (e.code === "KeyK") {
-      console.log(foc.item(this.counter));
-      foc.item(this.counter).focus();
-      if (this.counter < foc.length) {
-        this.counter++;
-      } else {
-        this.counter = 0;
-      }
-    }
-
-    if (e.code === "KeyL") {
-      console.log(document.activeElement);
-      this.clickIt = document.activeElement;
-      this.clickIt.click();
-    }
   }
 
   ngAfterViewInit() {
@@ -222,7 +197,6 @@ export class ControlsComponent implements AfterViewInit, OnInit {
           this.truncatedMobileNet.predict(img),
           label
         );
-
         this.drawThumb(img, label);
       });
     });
@@ -322,6 +296,12 @@ export class ControlsComponent implements AfterViewInit, OnInit {
         `Batch size is 0 or NaN. Please choose a non-zero fraction.`
       );
     }
+
+    // This function is asynchronous, obviously
+    // So, in our callback, we are switching the doneTraining switch!
+
+    // Epochs is how many iterations is going to pass the data through
+
     this.model.fit(this.controllerDataset.xs, this.controllerDataset.ys, {
       batchSize,
       epochs: +this.epochSel,
